@@ -78,6 +78,28 @@ def bill_paid(content: Optional[str]) -> bool:
         return True
 
 
+PERM_CHECK_TOOL = "check_app_permissions"
+_NEG_BEFORE = r"(n'?t|not|no|never|missing|without|lacks?)\b[^.!?]{0,40}"
+
+
+def perm_check_text(app: str) -> str:
+    return f"Could you please check which permissions the '{app}' app has now and read me the exact list?"
+
+
+def perm_regrant_text(app: str, perm: str) -> str:
+    return (f"It looks like the '{perm}' permission is not granted yet. It will not show in the list until you grant it. "
+            f"Could you please use the option to grant a permission and grant the '{app}' app the '{perm}' permission?")
+
+
+def perm_granted(text: Optional[str], perm: str) -> bool:
+    """Cheap lexical test that the user's reply shows `perm` as granted: the word appears and is not negated just before it
+    ("I don't see the 'sms' permission"). Visible text only. False on doubt; re-asking a grant is harmless (it is idempotent)."""
+    t, p = (text or "").lower(), re.escape(perm.lower())
+    if not re.search(rf"\b{p}\b", t):
+        return False
+    return not re.search(_NEG_BEFORE + rf"\b{p}\b", t)
+
+
 @dataclass(frozen=True)
 class Step:
     kind: str  # "call" (backend tool call) | "ask" (text request for a phone tool) | "say" (closing / transfer text)
@@ -109,9 +131,11 @@ def _task_dict(task: Any) -> dict:
     return task.model_dump() if hasattr(task, "model_dump") else task
 
 
-def build_plan(task: Any, verify_payment: bool = False) -> list[Step]:
+def build_plan(task: Any, verify_payment: bool = False, verify_permissions: bool = False) -> list[Step]:
     """The teacher's full script for `task` (tau2 Task or tasks.json row). Pure and deterministic.
-    verify_payment: after the make_payment request, read the bill back (get_details_by_id) so the agent can re-ask if unpaid."""
+    verify_payment: after the make_payment request, read the bill back (get_details_by_id) so the agent can re-ask if unpaid.
+    verify_permissions: after each grant_app_permission request, ask the user to read the app's permissions back, so the
+    agent can re-ask the grant if the permission is not listed."""
     d = _task_dict(task)
     key = true_key(d)
     gold = gold_actions(d)
@@ -139,6 +163,9 @@ def build_plan(task: Any, verify_payment: bool = False) -> list[Step]:
         plan.append(_call(a.tool, a.args_dict(), "gold") if a.requestor == "assistant" else _ask(a.tool, a.args_dict(), "gold"))
         if verify_payment and a.tool == "make_payment" and (a.args_dict().get("bill_id") or bill):
             plan.append(_call("get_details_by_id", {"id": a.args_dict().get("bill_id") or bill}, "verify_payment"))
+        if verify_permissions and a.tool == "grant_app_permission" and a.requestor == "user":
+            app = a.args_dict().get("app_name") or "messaging"
+            plan.append(Step("ask", PERM_CHECK_TOOL, _frozen_items({"app_name": app}), perm_check_text(app), "verify_permission"))
     plan += [_ask(VERIFY_TOOL.get(key[0], DIAGNOSE_TOOL), {}, "verify"), Step("say", text=CLOSING, why="claim")]
     return plan
 
@@ -161,6 +188,7 @@ class _Run:
     i: int = -1  # index of the last emitted step (-1: nothing yet)
     reasks: int = 0
     pay_retries: int = 0
+    perm_retries: dict = field(default_factory=dict)  # verify_permission step index -> grant re-asks so far
     trace: list = field(default_factory=list)
 
 
@@ -169,7 +197,7 @@ class OracleTeacherAgent(LLMAgent):
 
     def __init__(self, tools: list, domain_policy: str, task: Any, llm: Optional[str] = None, llm_args: Optional[dict] = None,
                  max_reasks: int = 2, stop_after_close: bool = False, no_toggle_reask: bool = False,
-                 verify_payment: bool = False):
+                 verify_payment: bool = False, verify_permissions: bool = False):
         super().__init__(tools=tools, domain_policy=domain_policy, llm=llm or "none", llm_args={})
         d = _task_dict(task)
         if not _register.train_safe([d["id"]]):
@@ -178,7 +206,8 @@ class OracleTeacherAgent(LLMAgent):
         self.stop_after_close = bool(stop_after_close)
         # no_toggle_reask: a re-asked toggle_* step is often done twice by the user sim, which undoes it.
         self.no_toggle_reask, self.verify_payment = bool(no_toggle_reask), bool(verify_payment)
-        self.plan = build_plan(d, verify_payment=self.verify_payment)
+        self.verify_permissions = bool(verify_permissions)
+        self.plan = build_plan(d, verify_payment=self.verify_payment, verify_permissions=self.verify_permissions)
         self.last_run: Optional[_Run] = None
 
     @classmethod
@@ -211,6 +240,16 @@ class OracleTeacherAgent(LLMAgent):
         last = run.plan[run.i] if run.i >= 0 else None
         if last is None:
             nxt = 0
+        elif last.why == "verify_permission":  # replaces the generic re-ask: "I don't see sms" means re-grant, not re-check
+            grant = run.plan[run.i - 1].args_dict()
+            tries = run.perm_retries.get(run.i, 0)
+            if tries < run.max_reasks and not perm_granted(getattr(message, "content", None), grant.get("permission", "")):
+                run.perm_retries[run.i] = tries + 1
+                text = perm_regrant_text(grant.get("app_name") or "messaging", grant.get("permission", ""))
+                msg = self._emit(run, run.i - 1, text, reask=tries + 1)
+                state.messages.append(msg)
+                return msg, state
+            nxt = run.i + 1
         elif (last.kind == "ask" and not reply_ok(getattr(message, "content", None)) and run.reasks < run.max_reasks
               and not (self.no_toggle_reask and last.tool.startswith("toggle_"))):
             run.reasks += 1
@@ -245,12 +284,13 @@ def _make(tools: list, domain_policy: str, llm: Optional[str] = None, llm_args: 
         raise _register.ConfigError(f"{NAME} needs the episode's task")
     _, boed = _register.split_boed_args(llm_args)
     kw = dict(boed.get("agent_kwargs") or {})
-    bad = set(kw) - {"max_reasks", "stop_after_close", "no_toggle_reask", "verify_payment"}
+    bad = set(kw) - {"max_reasks", "stop_after_close", "no_toggle_reask", "verify_payment", "verify_permissions"}
     if bad:
         raise _register.ConfigError(f"{NAME}: unknown agent_kwargs {sorted(bad)}")
     return OracleTeacherAgent(tools, domain_policy, task, llm, max_reasks=kw.get("max_reasks", 2),
                               stop_after_close=kw.get("stop_after_close", False),
-                              no_toggle_reask=kw.get("no_toggle_reask", False), verify_payment=kw.get("verify_payment", False))
+                              no_toggle_reask=kw.get("no_toggle_reask", False), verify_payment=kw.get("verify_payment", False),
+                              verify_permissions=kw.get("verify_permissions", False))
 
 
 FACTORIES = {NAME: _make}

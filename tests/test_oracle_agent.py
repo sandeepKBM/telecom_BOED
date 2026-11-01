@@ -240,6 +240,74 @@ def test_verify_payment_off_keeps_plan():
     assert all(s.why != "verify_payment" for s in O.build_plan(BYID[tid]))
 
 
+@pytest.mark.parametrize("text,perm,ok", [
+    ("App 'messaging' has permission for: storage, phone, sms.", "sms", True),
+    ("I granted the 'sms' permission, but the status bar still shows No Signal.", "sms", True),
+    ("The messaging app already has permission for storage and phone. I don't see the 'sms' permission listed.", "sms", False),
+    ("The messaging app currently has permission for phone.", "storage", False),
+    ("It does not have storage access.", "storage", False),
+    ("", "sms", False),
+])
+def test_perm_granted(text, perm, ok):
+    assert O.perm_granted(text, perm) is ok
+
+
+def _perm_tid():
+    return next(t for t in TRAIN if "grant_app_permission" in _gold_tools(t)
+                and "ACTION" not in BYID[t]["evaluation_criteria"]["reward_basis"])
+
+
+def _perm_episode(replies_to_check):
+    """Drive the teacher: every check reply comes from `replies_to_check` in turn (then a granted list); others say 'done'."""
+    agent = O.OracleTeacherAgent([], "policy", BYID[_perm_tid()], verify_permissions=True)
+    state = agent.get_init_state()
+    rep = iter(replies_to_check)
+    msg = UserMessage(role="user", content="hi")
+    for _ in range(len(agent.plan) + 20):
+        out, state = agent.generate_next_message(msg, state)
+        s = agent.plan[agent.last_run.i]
+        if out.tool_calls:
+            msg = ToolMessage(id=out.tool_calls[0].id, role="tool", requestor="assistant", content="{}")
+        elif s.why == "verify_permission":
+            msg = UserMessage(role="user", content=next(rep, "App 'messaging' has permission for: storage, phone, sms."))
+        else:
+            msg = UserMessage(role="user", content="ok, done.")
+    return agent
+
+
+def test_verify_permissions_plan_reaches_gold_state():
+    tid = _perm_tid()
+    plan = O.build_plan(BYID[tid], verify_permissions=True)
+    grants = [i for i, s in enumerate(plan) if s.tool == "grant_app_permission"]
+    assert grants and all(plan[i + 1].why == "verify_permission" and plan[i + 1].tool == O.PERM_CHECK_TOOL for i in grants)
+    state, outs = P.apply_calls(P.build_state(hypothesis_by_key(true_key(BYID[tid]))), O.plan_actions(plan))
+    assert not any(o.startswith("Error") for o in outs)
+    assert _final_grade(tid, state, False) == 1.0
+
+
+def test_verify_permissions_regrants_until_listed():
+    agent = _perm_episode(["It only has permission for phone. I don't see sms."])
+    g = next(i for i, s in enumerate(agent.plan) if s.tool == "grant_app_permission")
+    assert _emits_of(agent, g) == 2 and _emits_of(agent, g + 1) == 2  # one re-grant, one re-check
+    assert agent.last_run.i == len(agent.plan) - 1
+
+
+def test_verify_permissions_is_bounded():
+    agent = _perm_episode(["It has permission for phone only."] * 50)
+    for g, s in enumerate(agent.plan):
+        if s.tool == "grant_app_permission":
+            assert _emits_of(agent, g) == 1 + agent.max_reasks
+    assert agent.last_run.i == len(agent.plan) - 1
+
+
+def test_verify_permissions_off_keeps_plan():
+    tid = _perm_tid()
+    assert O.build_plan(BYID[tid]) == O.OracleTeacherAgent([], "policy", BYID[tid]).plan
+    assert all(s.why != "verify_permission" for s in O.build_plan(BYID[tid]))
+    a = O._make([], "policy", task=BYID[tid], llm_args={O._register.BOED_KEY: {"agent_kwargs": {"verify_permissions": True}}})
+    assert a.verify_permissions
+
+
 # ------------------------------------------------------------------ (c) registration + refusal
 def test_registered_and_idempotent():
     names = R.register_all()
