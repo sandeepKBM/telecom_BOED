@@ -1,0 +1,21 @@
+# [telecom_boed] run config (immutable once used: add a new named config, never edit). 2026-11-01 Step 1 tool masking: copy of
+# l2x_boedplain_native_train20 with ONLY name, agent_kwargs and num_tasks changed (tau2_ext/tool_mask.py).
+name: r3m_mask_repair_native_train5
+status: ready
+agent: boed-plain
+agent_kwargs: {scorer: reach, mask_phone_tools: true, repair_invalid_user_tools: true}
+user: user_simulator
+domain: telecom
+split: train
+num_tasks: 5
+num_trials: 1
+seed: 300
+max_steps: 200
+max_concurrency: 3
+max_errors: 10
+llm:
+  model: hosted_vllm/Qwen/Qwen3-8B
+  temperature: 0.0
+  extra_body: {chat_template_kwargs: {enable_thinking: false}}
+boed_config: configs/boed_default.yaml
+eval_final: false

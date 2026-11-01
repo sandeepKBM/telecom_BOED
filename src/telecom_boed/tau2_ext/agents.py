@@ -28,6 +28,7 @@ by the text "Could you please <action> and tell me exactly what you see?" + a RE
 so boed-plain+repair is the control for boed-controller+repair; sidecar `parse.repaired` = [{idx, from_tool, to_request}]) and
 `intent_prune_below` (default 0.05; intents the first user message gives less than this are not in the filter support when the message
 carried an intent cue; an uninformative first message keeps the uniform prior and a later informative one reweights/prunes it).
+Step 1 kwargs (2026-11-01, tool_mask.py, both off by default): `mask_phone_tools` (prompt mask) and `reject_phone_tools` (boed-plain).
 
 Sidecar line = dataclasses.asdict(contracts.SidecarRecord). Extra information lives inside `parse` (belief summary, incoming
 observation, emitted/candidate parses, sampling counters, `error`, `fallback`), because the dataclass is frozen by the contract.
@@ -62,7 +63,9 @@ from telecom_boed.decide.controller import Controller
 from telecom_boed.decide.utility import p_repaired
 from telecom_boed.env.featurize import featurize
 from telecom_boed.tau2_ext.register import split_boed_args
-from telecom_boed.tau2_ext.candidates import (TRANSFER_TOOL, Samples, repair_user_tool_call, sample_candidates, to_candidate_info)
+from telecom_boed.tau2_ext.candidates import (TRANSFER_TOOL, Samples, is_invalid_user_tool_call, repair_user_tool_call, sample_candidates,
+                                              to_candidate_info)
+from telecom_boed.tau2_ext.tool_mask import REJECT_TEXT, mask_policy, mask_tools
 
 PLAIN, CONTROLLER = "boed-plain", "boed-controller"
 _SIDECAR_LOCK = threading.Lock()
@@ -93,6 +96,8 @@ class BoedSettings:
     pick: str = "boed"  # controller: "boed" = Controller.decide; "first_new" = NO scoring: first candidate whose device/tool actions were not
     # emitted earlier this episode (else the first candidate). Baseline that isolates loop-avoidance from BOED scoring.
     intent_prune_below: float = 0.05  # W3-F1: an INFORMATIVE first user message drops intents with prob below this from the filter support (0 = keep all)
+    mask_phone_tools: bool = False  # Step 1 (2026-11-01, tool_mask.py): phone-tool names in the agent's system prompt become "[customer action: ...]"
+    reject_phone_tools: int = 0  # Step 1 (boed-plain only): a phone-tool call is rejected in a hidden side context and resampled up to N times
 
 
 _PRUNE_DEFAULT = 0.05
@@ -425,6 +430,12 @@ class _BoedBase(LLMAgent):
 
     def __init__(self, tools: list, domain_policy: str, llm: str, llm_args: Optional[dict] = None):
         self.boed_settings, clean = resolve_settings(llm_args)
+        self.mask_info: dict = {}
+        if self.boed_settings.mask_phone_tools:  # Step 1 prompt mask (off by default)
+            n_tools = len(tools)
+            tools = mask_tools(tools)
+            domain_policy, n_names = mask_policy(domain_policy, [t.name for t in tools])
+            self.mask_info = {"names_replaced": n_names, "tools_dropped": n_tools - len(tools)}
         super().__init__(tools=tools, domain_policy=domain_policy, llm=llm, llm_args=clean)
         self._last_ep: Optional[_Episode] = None
 
@@ -463,8 +474,10 @@ class BoedPlainAgent(_BoedBase):
         self._last_ep = ep
         t0 = time.perf_counter()
         msg, state = super().generate_next_message(message, state)  # identical to LLMAgent; may raise like LLMAgent
-        llm_s = time.perf_counter() - t0
         rep: dict = {}
+        if self.boed_settings.reject_phone_tools > 0:  # Step 1 reject + resample (off by default); runs before the repair template
+            msg = self._reject_resample(ep, msg, state, rep)
+        llm_s = time.perf_counter() - t0
         if self.boed_settings.repair_invalid_user_tools:  # control condition of boed-controller+repair: same rewrite, no scoring
             try:
                 new, cand = ep.repair(msg, 0, rep)
@@ -482,12 +495,40 @@ class BoedPlainAgent(_BoedBase):
                 pass
         return msg, state
 
+    def _reject_resample(self, ep: _Episode, msg: AssistantMessage, state: Any, rep: dict) -> AssistantMessage:
+        """Up to N hidden retries while `msg` calls a phone tool: the model sees [its call, an error ToolMessage] after the real history
+        (cumulative over retries) and generates again. Only the final message replaces the history entry; sidecar `parse.rejected`."""
+        side: list = []
+        tries: list = []
+        cur = msg
+        for k in range(int(self.boed_settings.reject_phone_tools)):
+            if not is_invalid_user_tool_call(cur, ep.tool_names):
+                break
+            tc = cur.tool_calls[0]
+            side += [cur, ToolMessage(id=tc.id, role="tool", content=REJECT_TEXT.format(tool=tc.name), requestor="assistant", error=True)]
+            try:
+                new = _la.generate(model=self.llm, tools=self.tools, messages=state.system_messages + state.messages[:-1] + side,
+                                   call_name="agent_response", **self.llm_args)
+            except Exception as e:  # keep the last message; the repair template (if on) still applies
+                tries.append({"try": k + 1, "from_tool": tc.name, "error": f"{type(e).__name__}: {e}"})
+                break
+            tries.append({"try": k + 1, "from_tool": tc.name, "new_tool": new.tool_calls[0].name if new.tool_calls else None,
+                          "cost": getattr(new, "cost", None)})
+            cur = new
+        if tries:
+            rep["rejected"] = tries
+            if cur is not msg:
+                state.messages[-1] = cur
+        return cur
+
     def _shadow(self, ep: _Episode, message: Any, msg: AssistantMessage, llm_s: float, rep: Optional[dict] = None) -> None:
         parse: dict = {"error": []}
         rep = dict(rep or {})
         rcand = rep.pop("_cand", None)
         if rep:
             parse.update(rep)
+        if self.mask_info and ep.turn == 0:
+            parse["mask"] = dict(self.mask_info)
         tm = {"llm": llm_s, "filter": 0.0, "parse": 0.0, "score": 0.0}
         scores: dict = {}
         decision: dict = {}
@@ -533,6 +574,11 @@ class BoedPlainAgent(_BoedBase):
 
 class BoedControllerAgent(_BoedBase):
     """Samples N candidates, lets the BOED controller choose."""
+
+    def __init__(self, *a: Any, **k: Any):
+        super().__init__(*a, **k)
+        if self.boed_settings.reject_phone_tools:
+            raise ValueError("reject_phone_tools is boed-plain only (the controller repairs its samples instead)")
 
     def get_init_state(self, message_history: Optional[list] = None) -> BoedAgentState:
         st = super().get_init_state(message_history)

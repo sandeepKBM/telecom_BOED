@@ -43,7 +43,7 @@ def test_transitive_imports_include_parent_packages():
 
 
 def test_deployable_modules_clean():
-    assert len(DEPLOYABLE_MODULES) == 5  # + tau2_ext.belief_script (2026-11-01)
+    assert len(DEPLOYABLE_MODULES) == 6  # + tau2_ext.belief_script, tau2_ext.tool_mask (2026-11-01)
     rep = check_deployable(DEPLOYABLE_MODULES)
     print(f"\n[W1-S3] pending deployable modules: {rep.pending}; scanned: {sorted(rep.modules)}")
     assert not rep.problems(), "\n".join(rep.problems())
