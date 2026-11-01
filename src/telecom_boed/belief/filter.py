@@ -393,7 +393,7 @@ class ParticleFilter:
         opts = []
         for a in acts:
             if user_branch and a.requestor == "user":
-                opts.append([(b, pr) for b, pr in (("nd", um.p_not_done), ("d", um.q), ("dd", um.eps_double)) if pr > 0.0])
+                opts.append([(b, pr) for b, pr in um.branches_for(a.tool) if pr > 0.0])
             else:
                 opts.append([("d", 1.0)])
         has_user = user_branch and any(a.requestor == "user" for a in acts)

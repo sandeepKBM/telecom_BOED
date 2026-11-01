@@ -1,0 +1,67 @@
+# boed_v2_tmpl_rollout (2026-11-01): boed_v2 + per-type user compliance fitted on TEMPLATE requests, results/usersim/teacher_template_fit_2026-11-01
+# (scripts/usersim_fidelity.py over the native r1b + r1d teacher runs, Qwen3-8B user): state-changing 1535/1880 = 0.816, read
+# 1122/1312 = 0.855. Plus reach_avoid.leaf rollout,
+# transfer_penalty, depth_k 1 (decide/rollout_leaf.py). For the template-speaking boed-script arms; the Qwen-agent arms keep boed_v2_umfit (0.338 / 0.672).
+# [telecom_boed] boed_v2 (P0-2, 2026-10-31): copy of boed_default.yaml for the P3 controller study (all arms share it). Differences from
+# boed_default, nothing else: name; agent.intent_prune_below 0.1 (tau2_ext/agents.py reads it when the setting is left at its 0.05
+# default); perf.* block (env/particles.py state-hash reuse, filter abort checks between stepper waves, controller bundle cap and
+# deadline margin). Every perf switch is off/absent in boed_default, so old configs reproduce exactly.
+# [telecom_boed] Default BOED / reach-avoid knobs (contract v1). NEVER edit in place: copy to a new named config.
+# These are starting values for construction and tests. They are not tuned. Every run records the config hash.
+# Units: cost is in "turn units". One agent turn = 1 turn unit; see turn_cost / tool_cost.
+name: boed_v2_tmpl_rollout
+contract_version: 1
+
+cost:
+  lambda: 0.02           # λ: utility price of one turn unit (eqs. 1-4)
+  turn_cost: 1.0         # C(a) for one agent message to the user
+  tool_cost: 0.25        # C(a) for one backend tool call (it also uses up tau2 max_steps)
+  rho: 0.5               # ρ: weight on the risk penalty R(a) (decide/risk.py table)
+  budget_B: 30.0         # B: budget in turn units; C > B counts as failure in eq. 4
+
+utility:
+  c_FA: 1.0              # penalty for a false acceptance (claim_resolved while grade = 0)
+  c_esc: 0.3             # penalty for an unnecessary transfer (escalating a fixable fault)
+
+reach_avoid:
+  gamma: 1.0             # γ in eq. 4 (finite horizon via budget_B)
+  delta: 0.1             # commit only if P_β(repaired) >= 1 - δ
+  eta: 0.05              # escalate if max_a Q(β, a) < η
+  p_star: 0.9            # margin-variant target level ℓ(β) = P_β(repaired) - p*
+  v_lr: 10.0             # likelihood-ratio threshold that sets v = 1 (contracts.py docstring)
+  leaf: rollout          # decide/rollout_leaf.py: manual-order base-policy rollout at depth-0 leaves (default none)
+  leaf_n_roll: 8         # particles sampled per leaf when the belief has more than leaf_exact_max
+  leaf_exact_max: 64     # beliefs this small are summed exactly
+  rollout_compliance: true  # a device step costs C(a)/q(a) in the rollout
+  transfer_penalty: true # Q(transfer) = P(req & ok) - c_esc * P(fixable)  (utility.q_transfer_reach_pen)
+
+lookahead:
+  depth_k: 1             # expectimax depth (boed_v2_tmpl_rollout: depth 1 + leaf value)
+  inner_m: 6             # inner-node action set: heuristic order ∪ top-m by myopic DUG
+  memo_round: 1.0e-9     # weight rounding for memo keys
+
+user_model:
+  compliance_q: 0.9      # P(user performs a requested device action exactly once)
+  eps_double: 0.02       # P(user performs it twice; matters for toggles)
+  eps_extra: 0.02        # P(user also performs one unrequested mutating action, e.g. reboot_device)
+  default_mention_p: 0.7 # P(a user reply mentions a given field of the tool output), before per-persona fits
+  compliance_q_read: 0.855      # teacher template fit 1b (read/check requests)
+  compliance_q_mutating: 0.816  # teacher template fit 1a (state-changing requests)
+
+controller:
+  n_candidates: 4        # N Qwen samples per agent turn (boed-controller)
+  candidate_temperature: 0.7
+  override: filter_commit   # none | filter_commit | full
+  scorer: reach          # dug | kstep | reach | eig | heuristic
+
+latency:
+  p95_scoring_ms: 500    # budget for one controller decision on the 1,984-particle mms support
+
+agent:
+  intent_prune_below: 0.1   # was 0.05 (BoedSettings default): the 2026-10-28 replay kept mms (2,285 particles) at off-intent prob 0.077
+
+perf:
+  reuse_state_hash: true      # env/particles.py: reuse the parent's DB hash when the dump is unchanged (bit-identical keys)
+  predict_abort_checks: true  # filter polls the controller deadline between stepper waves (one predict is no longer uninterruptible)
+  bundle_cap_actions: 8       # start high (user 2026-10-31): past chosen requests had <=8 actions in 996/997; tune from stats n_capped
+  deadline_margin_ms: 50      # deadline = budget - margin, covering the wave in flight when the abort fires

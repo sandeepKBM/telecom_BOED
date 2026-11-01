@@ -58,7 +58,7 @@ def train_safe(task_ids) -> bool:
     return all(t not in test and fs(t) not in test_fs for t in task_ids)
 ORACLE_AGENTS = frozenset({"oracle-teacher"})  # privileged scripted teacher (rollout/oracle_agent.py): train-safe tasks only
 PLUGIN_MODULES = ("telecom_boed.tau2_ext.agents", "telecom_boed.tau2_ext.personas",
-                  "telecom_boed.rollout.oracle_agent")  # each: register(registry) -> names
+                  "telecom_boed.rollout.oracle_agent", "telecom_boed.tau2_ext.belief_script")  # each: register(registry) -> names
 DEFAULT_BOED_CONFIG = "configs/boed_default.yaml"
 RUNS_DIR = paths.CONFIG_DIR / "runs"
 _NAME_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.\-]*$")

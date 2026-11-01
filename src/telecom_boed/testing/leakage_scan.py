@@ -17,6 +17,7 @@ PKG = "telecom_boed"
 DEPLOYABLE_MODULES: tuple[str, ...] = (
     "telecom_boed.tau2_ext.agents",
     "telecom_boed.tau2_ext.candidates",
+    "telecom_boed.tau2_ext.belief_script",
     "telecom_boed.belief.parsers",
     "telecom_boed.belief.filter",  # oracle mode receives true observations from the caller; must not import oracle_*
 )

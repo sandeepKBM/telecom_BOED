@@ -196,6 +196,17 @@ def q_claim_reach(belief: Belief, grader: Grader) -> float:
     return p_repaired(belief, grader) if belief.v else 0.0
 
 
+def q_transfer_reach_pen(belief: Belief, grader: Grader, c_esc: float) -> float:
+    """reach_avoid.transfer_penalty (off by default, 2026-11-01): Q(transfer) = P(requires_transfer and grade(h', True) == 1)
+    - c_esc * P(not requires_transfer), so escalating while a fixable fault is likely costs about c_esc * P(fixable)."""
+    t, v = view_of(belief, grader)
+    r = v.memo.get(("qtp", c_esc))
+    if r is None:
+        req = t.req[v.ids]
+        r = v.memo[("qtp", c_esc)] = q_transfer_reach(belief, grader) - c_esc * sum(v.w[~req].tolist())
+    return r
+
+
 def q_transfer_reach(belief: Belief, grader: Grader) -> float:
     """Eq. 4: Q(transfer) = P(requires_transfer and grade(h', True) == 1). Transferring a fixable fault has value 0 (kappa)."""
     t, v = view_of(belief, grader)

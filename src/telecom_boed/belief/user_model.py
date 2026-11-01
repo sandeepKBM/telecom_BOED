@@ -124,6 +124,10 @@ def primary_groups(tool: str) -> Optional[tuple[str, ...]]:
 
 
 # --------------------------------------------------------------------------- parameters
+def _opt(v: Any) -> Optional[float]:
+    return None if v is None else float(v)
+
+
 def _deep_merge(base: dict, over: Mapping[str, Any]) -> dict:
     out = copy.deepcopy(base)
     for k, v in over.items():
@@ -155,14 +159,19 @@ class UserModel:
     eps_conf: float = 0.05
     report_when_not_done: str = "uniform"
     mention_boost: Mapping[str, float] = field(default_factory=dict)
+    # Optional per-tool-type compliance (cfg compliance_q_read / compliance_q_mutating). None = use q (the old behaviour).
+    q_read: Optional[float] = None
+    q_mutating: Optional[float] = None
 
     def __post_init__(self) -> None:
         for n, v in (("q", self.q), ("eps_double", self.eps_double), ("eps_extra", self.eps_extra),
-                     ("default_mention_p", self.default_mention_p), ("eps_conf", self.eps_conf)):
-            if not 0.0 <= v <= 1.0:
+                     ("default_mention_p", self.default_mention_p), ("eps_conf", self.eps_conf),
+                     ("q_read", self.q_read), ("q_mutating", self.q_mutating)):
+            if v is not None and not 0.0 <= v <= 1.0:
                 raise ValueError(f"user_model.{n}={v} outside [0, 1]")
-        if self.q + self.eps_double > 1.0 + 1e-12:
-            raise ValueError(f"user_model: compliance_q + eps_double = {self.q + self.eps_double} > 1")
+        for n, v in (("compliance_q", self.q), ("compliance_q_read", self.q_read), ("compliance_q_mutating", self.q_mutating)):
+            if v is not None and v + self.eps_double > 1.0 + 1e-12:
+                raise ValueError(f"user_model: {n} + eps_double = {v + self.eps_double} > 1")
         if self.report_when_not_done not in ("uniform", "claims_done"):
             raise ValueError(f"report_when_not_done={self.report_when_not_done!r}: expected uniform | claims_done")
 
@@ -173,6 +182,17 @@ class UserModel:
     def branch_probs(self) -> dict[str, float]:
         """Per-action execution branch probabilities (sum to 1)."""
         return {"not_done": self.p_not_done, "done": self.q, "done_twice": self.eps_double}
+
+    def q_for(self, tool: str) -> float:
+        """Compliance for one requested tool: q_mutating / q_read when set, else q."""
+        v = self.q_mutating if is_mutating_tool(tool) else self.q_read
+        return self.q if v is None else v
+
+    def branches_for(self, tool: str) -> tuple[tuple[str, float], ...]:
+        """(nd, d, dd) branch probabilities for one requested tool (filter._combos). Equals (p_not_done, q, eps_double) when
+        the per-type values are unset."""
+        q = self.q_for(tool)
+        return (("nd", max(0.0, 1.0 - q - self.eps_double)), ("d", q), ("dd", self.eps_double))
 
     def mention_p(self, group: str) -> float:
         return min(1.0, self.default_mention_p * float(self.mention_boost.get(group, 1.0)))
@@ -193,4 +213,6 @@ class UserModel:
                    eps_extra=float(merged["eps_extra"]), default_mention_p=float(merged["default_mention_p"]),
                    eps_conf=float(merged.get("eps_conf", 0.05)),
                    report_when_not_done=str(merged.get("report_when_not_done", "uniform")),
-                   mention_boost=dict(merged.get("mention_boost", {})))
+                   mention_boost=dict(merged.get("mention_boost", {})),
+                   q_read=_opt(base.get("compliance_q_read", merged.get("compliance_q_read"))),
+                   q_mutating=_opt(base.get("compliance_q_mutating", merged.get("compliance_q_mutating"))))

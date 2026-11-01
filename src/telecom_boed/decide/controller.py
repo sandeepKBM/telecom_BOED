@@ -31,6 +31,7 @@ predict once time is up), so a single predict call, which cannot be interrupted,
 ~0.5-2 s). Level k+1 is not started if the remaining time is below the last level's duration. If level 1 does not complete,
 the controller falls back to MyopicDUG over the candidates whose one-step prediction had already finished (their predicts are
 cached) plus the terminals, and says so in `reason`. dug / eig under a budget degrade the same way (fewer candidates scored).
+With reach_avoid.leaf on (off by default) the fallback is the leaf's base policy instead: HeuristicScorer (manual order, done steps skipped).
 `self.stats` (last decision) and `self.stats_log` hold {scorer, depth, depth_target, elapsed_ms, budget_ms, fallback, n_scored,
 n_candidates, overran, override}.
 
@@ -405,6 +406,15 @@ class Controller:
                     n_scored=len(sub))
         if not sub:  # W3-F1: the agent offers no terminals and no predict finished in time -> nothing to compare: first candidate
             return 0, {}, info
+        leaf = getattr(self.scorer, "leaf", None)
+        if leaf is not None:  # reach_avoid.leaf on (default off): fall back to the rollout's base policy, the manual order
+            hs = HeuristicScorer(self.grader, self.cfg)
+            hs.done = {a[0].tool for _, a in leaf.done if a}
+            sub_all = list(cands)
+            hv = hs.score(belief, sub_all)
+            j = max(range(len(sub_all)), key=lambda i: (hv[i], -i))
+            info.update(fallback=f"heuristic base policy ({why}); leaf={leaf.kind}", n_scored=len(sub_all))
+            return j, {i: float(hv[i]) for i in range(len(sub_all))}, info
         fb = EIGScorer(self.predictor, self.grader, self.cfg) if self.scorer_name == "eig" else MyopicDUG(self.predictor, self.grader, self.cfg)
         info["fallback"] = f"{fb.name} ({why}); scored {len(done)}/{n_nt} nonterminals"
         # W3-F1: the scorers' tie-break needs a terminal (dug.py:57 max() over none raised ValueError for agent-offered sets without

@@ -14,6 +14,10 @@ ties: first index). If there is no transfer candidate the escalation step is ski
   l(b) = max( min{ P(repaired) - p*, v - 1/2 },  P(requires_transfer and grade(True)=1) - p* )   [2nd term: transfer extension]
   g(b) = min{ B - cost(b), 1/2 - kappa(b) }
   V_d(b) = (1-gamma)*min{l,g} + gamma*min{ g, max{ l, max_a E_o V_{d-1}(b'_o) } },  V_0 = (1-gamma)*min{l,g} + gamma*min{g,l}
+Switches (2026-11-01, both off by default; ReachAvoid only, ReachAvoidMargin ignores them):
+  reach_avoid.leaf = none | rollout | fraction: the depth-0 value is max{Q_claim, Q_transfer, R(b)} with R from decide/rollout_leaf.py.
+  With a leaf, a nonterminal whose every predicted belief equals b (same particle digest, v, kappa, transferred) scores NEG.
+  reach_avoid.transfer_penalty = true: Q_transfer = P(requires_transfer and grade(True)=1) - c_esc * P(fixable) (utility.q_transfer_reach_pen).
 Sign convention: V > 0 iff reach-before-avoid is certain; a failed belief (kappa) has V <= g = -1/2 (not 0). lambda, rho are not used.
 Q scores: nonterminal = E_o V_{d-1}(b'_o); claim = min{ g, min{P(repaired)-p*, v-1/2} }; transfer = min{ g, P(transfer ok) - p* }.
 """
@@ -23,7 +27,7 @@ from typing import Sequence
 
 from telecom_boed.contracts import Belief, CandidateAction, DecisionKind
 from telecom_boed.decide.expectimax import NEG, LookaheadBase, bench_scoring  # noqa: F401  (bench_scoring re-exported)
-from telecom_boed.decide.utility import is_terminal, p_repaired, q_claim_reach, q_transfer_reach
+from telecom_boed.decide.utility import is_terminal, p_repaired, q_claim_reach, q_transfer_reach, q_transfer_reach_pen
 
 TOL = 1e-12
 
@@ -36,12 +40,58 @@ class ReachAvoid(LookaheadBase):
         self.gamma = float(self.cfg["reach_avoid"]["gamma"])
         self.delta = float(self.cfg["reach_avoid"]["delta"])
         self.eta = float(self.cfg["reach_avoid"]["eta"])
+        ra = self.cfg["reach_avoid"]
+        self.transfer_penalty = bool(ra.get("transfer_penalty", False))
+        self.c_esc = float(self.cfg["utility"]["c_esc"])
+        kind = str(ra.get("leaf", "none"))
+        self.leaf = None
+        if kind != "none" and type(self) is ReachAvoid:
+            from telecom_boed.decide.rollout_leaf import LeafValue
+            self.leaf = LeafValue(kind, self.grader, self.cfg, user_model=getattr(self.predictor, "um", None))
+
+    def _qt(self, b: Belief) -> float:
+        if self.transfer_penalty:
+            return q_transfer_reach_pen(b, self.grader, self.c_esc)
+        return q_transfer_reach(b, self.grader)
+
+    def clear_memo(self) -> None:
+        super().clear_memo()
+        if self.leaf is not None:
+            self.leaf.clear()
+
+    def reset(self) -> None:
+        super().reset()
+        if self.leaf is not None:
+            self.leaf.reset()
+
+    def mark_done(self, cand: CandidateAction) -> None:
+        """Executed-action report (tau2_ext/agents.py note_emitted). Only the rollout leaf uses it (its base policy skips done steps)."""
+        if self.leaf is not None:
+            self.leaf.mark_done(cand)
+
+    def _key(self, b: Belief, d: int) -> tuple:
+        k = super()._key(b, d)
+        return k if self.leaf is None else k + (self.leaf.path_sig(), frozenset(self.leaf.done))
 
     def _q(self, b: Belief, a: CandidateAction, d: int) -> float:
         c, pen = self._penalty(b, a)
         if b.cost + c > self.B:
             return -pen
-        return self.gamma * sum(p * self._v(b2, d - 1) for p, b2 in self.predictor.predict(b, a).values()) - pen
+        if self.leaf is None:
+            return self.gamma * sum(p * self._v(b2, d - 1) for p, b2 in self.predictor.predict(b, a).values()) - pen
+        out = self.predictor.predict(b, a)
+        if self._no_effect(b, out):
+            return NEG  # leaf on: an action that changes neither the belief nor v can never pay for its cost (stops read loops)
+        self.leaf.path.append((a.kind, a.actions))
+        try:
+            return self.gamma * sum(p * self._v(b2, d - 1) for p, b2 in out.values()) - pen
+        finally:
+            self.leaf.path.pop()
+
+    def _no_effect(self, b: Belief, out: dict) -> bool:
+        k0 = self._key(b, 0)
+        return all((b2.v, b2.kappa, b2.transferred) == (b.v, b.kappa, b.transferred) and self._key(b2, 0)[0] == k0[0]
+                   for _, b2 in out.values())
 
     def _v(self, b: Belief, d: int) -> float:
         if b.cost > self.B or b.kappa:
@@ -49,7 +99,9 @@ class ReachAvoid(LookaheadBase):
         return self._memoised(b, d, lambda: self._v_raw(b, d))
 
     def _v_raw(self, b: Belief, d: int) -> float:
-        best = max(q_claim_reach(b, self.grader), q_transfer_reach(b, self.grader))
+        best = max(q_claim_reach(b, self.grader), self._qt(b))
+        if d == 0 and self.leaf is not None:
+            best = max(best, self.leaf.value(b))
         if d > 0:
             for a in self._inner(b):
                 best = max(best, self._q(b, a, d))
@@ -60,13 +112,15 @@ class ReachAvoid(LookaheadBase):
         return self._v(belief, self.depth)
 
     def q_values(self, belief: Belief, candidates: Sequence[CandidateAction]) -> list[float]:
-        self._set_root(candidates)
+        nt = self._set_root(candidates)
+        if self.leaf is not None:
+            self.leaf.set_root(nt)
         out = []
         for c in candidates:
             if c.kind == DecisionKind.CLAIM_RESOLVED:
                 out.append(q_claim_reach(belief, self.grader))
             elif c.kind == DecisionKind.TRANSFER:
-                out.append(q_transfer_reach(belief, self.grader))
+                out.append(self._qt(belief))
             else:
                 out.append(self._q(belief, c, self.depth) if self.depth > 0 else NEG)
         return out
