@@ -184,6 +184,62 @@ def test_factory_reads_stop_after_close():
     assert a.stop_after_close and not O._make([], "policy", task=BYID[tid]).stop_after_close
 
 
+def _gold_tools(tid):
+    return [a.tool for a in O.gold_actions(BYID[tid])]
+
+
+def _emits_of(agent, idx):
+    return sum(t["oracle_step"] == idx for t in agent.last_run.trace)
+
+
+@pytest.mark.parametrize("flag,expect", [(True, 1), (False, 3)])
+def test_no_toggle_reask(flag, expect):
+    tid = next(t for t in TRAIN if any(x.startswith("toggle_") for x in _gold_tools(t)))
+    agent = O.OracleTeacherAgent([], "policy", BYID[tid], no_toggle_reask=flag)
+    state = agent.get_init_state()
+    idx = next(i for i, s in enumerate(agent.plan) if s.kind == "ask" and s.tool.startswith("toggle_"))
+    for _ in range(len(agent.plan) + 10):
+        _, state = agent.generate_next_message(UserMessage(role="user", content="I'm not sure, I am still unable to."), state)
+    assert _emits_of(agent, idx) == expect  # 1 ask + 2 re-asks when the flag is off
+
+
+def _pay_episode(statuses):
+    tid = next(t for t in TRAIN if "make_payment" in _gold_tools(t))
+    agent = O.OracleTeacherAgent([], "policy", BYID[tid], verify_payment=True)
+    state = agent.get_init_state()
+    ask = next(i for i, s in enumerate(agent.plan) if s.kind == "ask" and s.tool == "make_payment")
+    assert agent.plan[ask + 1].why == "verify_payment" and agent.plan[ask + 1].args_dict()["id"].startswith("B")
+    st = iter(statuses)
+    msg = UserMessage(role="user", content="hi")
+    for _ in range(len(agent.plan) + 10):
+        out, state = agent.generate_next_message(msg, state)
+        if out.tool_calls and agent.plan[agent.last_run.i].why == "verify_payment":
+            msg = ToolMessage(id=out.tool_calls[0].id, role="tool", requestor="assistant",
+                              content=json.dumps({"bill_id": "B1", "status": next(st, "Paid")}))
+        elif out.tool_calls:
+            msg = ToolMessage(id=out.tool_calls[0].id, role="tool", requestor="assistant", content="{}")
+        else:
+            msg = UserMessage(role="user", content="ok, I paid it.")
+    return agent, ask
+
+
+def test_verify_payment_reasks_until_paid():
+    agent, ask = _pay_episode(["Overdue", "Paid"])
+    assert _emits_of(agent, ask) == 2 and _emits_of(agent, ask + 1) == 2
+    assert agent.last_run.i == len(agent.plan) - 1  # script went on to the end
+
+
+def test_verify_payment_is_bounded():
+    agent, ask = _pay_episode(["Overdue"] * 10)
+    assert _emits_of(agent, ask) == 1 + agent.max_reasks
+
+
+def test_verify_payment_off_keeps_plan():
+    tid = next(t for t in TRAIN if "make_payment" in _gold_tools(t))
+    assert O.build_plan(BYID[tid]) == O.OracleTeacherAgent([], "policy", BYID[tid]).plan
+    assert all(s.why != "verify_payment" for s in O.build_plan(BYID[tid]))
+
+
 # ------------------------------------------------------------------ (c) registration + refusal
 def test_registered_and_idempotent():
     names = R.register_all()

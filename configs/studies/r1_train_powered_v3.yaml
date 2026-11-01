@@ -1,0 +1,21 @@
+# v3 (2026-11-01): teacher arm = r1c_teacher_t4_native (stop_after_close + no_toggle_reask + verify_payment). Other arms = v2 jobs.
+# [telecom_boed] study spec. P2 re-baseline (R1), stage "powered": train-74 x 4 trial(s), 4 arms x {native, six-persona mix}. The runner has no
+# 'stages' key (strict schema), so the two stages are two study files: r1_train (pilot, 1 trial) and r1_train_powered (4 trials).
+# Run:  python3 scripts/telecom_study.py plan configs/studies/r1_train_powered.yaml   (manifest: results/studies/r1_train_powered/manifest.jsonl).
+# Copied from p4_train: same hold/gpus/concurrency/split/mix rule. Differs: deterministic false (D-a NOT chosen: default serving), arms, tag_prefix.
+# Arms: llm_agent plain, boed-plain+repair, telecom-workflow, oracle-teacher. mix = six personas dealt round-robin over the sorted 74 ids.
+name: r1_train_powered_v3
+hold_job: 526576
+gpus: [0, 1, 3]
+max_concurrent: 2
+deterministic: false
+split: train
+tag_prefix: r1x
+arms:
+  - r1_plain_t4_native
+  - r1_plainrepair_t4_native
+  - r1_workflow_t4_native
+  - r1c_teacher_t4_native
+users: [native, mix]
+sec_per_episode: 45       # planning only (p4 value, deterministic mode); P2 uses default serving, see scripts/r1_estimate.py for theta-based numbers
+startup_s: 180

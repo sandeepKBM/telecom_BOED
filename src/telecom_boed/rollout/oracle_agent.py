@@ -18,6 +18,7 @@ Use: train-safe tasks only. `register.check_oracle_allowed` (parse + check_names
 """
 from __future__ import annotations
 
+import json
 import re
 from dataclasses import dataclass, field
 from typing import Any, Optional
@@ -69,6 +70,14 @@ def reply_ok(text: Optional[str]) -> bool:
     return bool(t) and (("###" in t) or not _CONFUSED.search(t))
 
 
+def bill_paid(content: Optional[str]) -> bool:
+    """True if a get_details_by_id bill reply shows status Paid. Unreadable replies count as paid (never loop on them)."""
+    try:
+        return json.loads(content or "").get("status") == "Paid"
+    except (ValueError, AttributeError):
+        return True
+
+
 @dataclass(frozen=True)
 class Step:
     kind: str  # "call" (backend tool call) | "ask" (text request for a phone tool) | "say" (closing / transfer text)
@@ -100,8 +109,9 @@ def _task_dict(task: Any) -> dict:
     return task.model_dump() if hasattr(task, "model_dump") else task
 
 
-def build_plan(task: Any) -> list[Step]:
-    """The teacher's full script for `task` (tau2 Task or tasks.json row). Pure and deterministic."""
+def build_plan(task: Any, verify_payment: bool = False) -> list[Step]:
+    """The teacher's full script for `task` (tau2 Task or tasks.json row). Pure and deterministic.
+    verify_payment: after the make_payment request, read the bill back (get_details_by_id) so the agent can re-ask if unpaid."""
     d = _task_dict(task)
     key = true_key(d)
     gold = gold_actions(d)
@@ -124,8 +134,11 @@ def build_plan(task: Any) -> list[Step]:
         summary = (t.args_dict().get("summary") if t else None) or "I cannot fix the issue."
         plan += [_call(TRANSFER_TOOL, {"summary": summary}, "transfer"), Step("say", text=TRANSFER_SAY, why="transfer")]
         return plan
+    bill = next((a.args_dict().get("bill_id") for a in gold if a.tool == "send_payment_request"), None)
     for a in gold:
         plan.append(_call(a.tool, a.args_dict(), "gold") if a.requestor == "assistant" else _ask(a.tool, a.args_dict(), "gold"))
+        if verify_payment and a.tool == "make_payment" and (a.args_dict().get("bill_id") or bill):
+            plan.append(_call("get_details_by_id", {"id": a.args_dict().get("bill_id") or bill}, "verify_payment"))
     plan += [_ask(VERIFY_TOOL.get(key[0], DIAGNOSE_TOOL), {}, "verify"), Step("say", text=CLOSING, why="claim")]
     return plan
 
@@ -147,6 +160,7 @@ class _Run:
     max_reasks: int
     i: int = -1  # index of the last emitted step (-1: nothing yet)
     reasks: int = 0
+    pay_retries: int = 0
     trace: list = field(default_factory=list)
 
 
@@ -154,14 +168,17 @@ class OracleTeacherAgent(LLMAgent):
     """Scripted teacher. Subclasses LLMAgent only for tau2's stop/transfer plumbing and state; it never calls an LLM."""
 
     def __init__(self, tools: list, domain_policy: str, task: Any, llm: Optional[str] = None, llm_args: Optional[dict] = None,
-                 max_reasks: int = 2, stop_after_close: bool = False):
+                 max_reasks: int = 2, stop_after_close: bool = False, no_toggle_reask: bool = False,
+                 verify_payment: bool = False):
         super().__init__(tools=tools, domain_policy=domain_policy, llm=llm or "none", llm_args={})
         d = _task_dict(task)
         if not _register.train_safe([d["id"]]):
             raise _register.ConfigError(f"{NAME}: task {d['id']!r} is not train-safe (test-40 id or fault set)")
         self.task_id, self.max_reasks = d["id"], int(max_reasks)
         self.stop_after_close = bool(stop_after_close)
-        self.plan = build_plan(d)
+        # no_toggle_reask: a re-asked toggle_* step is often done twice by the user sim, which undoes it.
+        self.no_toggle_reask, self.verify_payment = bool(no_toggle_reask), bool(verify_payment)
+        self.plan = build_plan(d, verify_payment=self.verify_payment)
         self.last_run: Optional[_Run] = None
 
     @classmethod
@@ -194,9 +211,17 @@ class OracleTeacherAgent(LLMAgent):
         last = run.plan[run.i] if run.i >= 0 else None
         if last is None:
             nxt = 0
-        elif last.kind == "ask" and not reply_ok(getattr(message, "content", None)) and run.reasks < run.max_reasks:
+        elif (last.kind == "ask" and not reply_ok(getattr(message, "content", None)) and run.reasks < run.max_reasks
+              and not (self.no_toggle_reask and last.tool.startswith("toggle_"))):
             run.reasks += 1
             msg = self._emit(run, run.i, reask_text(last.text, run.reasks), reask=run.reasks)
+            state.messages.append(msg)
+            return msg, state
+        elif (last.kind == "call" and last.why == "verify_payment" and run.pay_retries < run.max_reasks
+              and not bill_paid(getattr(message, "content", None))):  # user said they paid but the bill is unpaid
+            run.pay_retries += 1
+            ask = run.plan[run.i - 1]
+            msg = self._emit(run, run.i - 1, reask_text(ask.text, run.pay_retries), reask=run.pay_retries)
             state.messages.append(msg)
             return msg, state
         elif self.stop_after_close and run.i == len(run.plan) - 1:  # user answered the final text: end the chat
@@ -220,11 +245,12 @@ def _make(tools: list, domain_policy: str, llm: Optional[str] = None, llm_args: 
         raise _register.ConfigError(f"{NAME} needs the episode's task")
     _, boed = _register.split_boed_args(llm_args)
     kw = dict(boed.get("agent_kwargs") or {})
-    bad = set(kw) - {"max_reasks", "stop_after_close"}
+    bad = set(kw) - {"max_reasks", "stop_after_close", "no_toggle_reask", "verify_payment"}
     if bad:
         raise _register.ConfigError(f"{NAME}: unknown agent_kwargs {sorted(bad)}")
     return OracleTeacherAgent(tools, domain_policy, task, llm, max_reasks=kw.get("max_reasks", 2),
-                              stop_after_close=kw.get("stop_after_close", False))
+                              stop_after_close=kw.get("stop_after_close", False),
+                              no_toggle_reask=kw.get("no_toggle_reask", False), verify_payment=kw.get("verify_payment", False))
 
 
 FACTORIES = {NAME: _make}
