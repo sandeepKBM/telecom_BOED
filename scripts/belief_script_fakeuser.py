@@ -86,12 +86,13 @@ def run(task: dict, scorer: str, config: str, budget_ms: int, max_steps: int = 1
             "transferred": transferred, "false_accept": bool(claimed and reward < 1.0), "decisions": len(boed),
             "claims_chosen": claims, "p_repaired_end": last_p, "agent_turns": n, "wall_s": round(time.time() - t0, 1),
             "score_ms_p50": lat[len(lat) // 2] if lat else None, "score_ms_max": lat[-1] if lat else None,
-            "chosen_tools": [a["tool"] for r in boed for a in r.decision.get("chosen", {}).get("actions", [])]}
+            "chosen_tools": [a["tool"] for r in boed for a in r.decision.get("chosen", {}).get("actions", [])],
+            "fallbacks": sum(1 for r in boed if (r.decision.get("stats") or {}).get("fallback"))}
 
 
 def summarize(files: list) -> str:
     rows = ["| file | n | pass | claimed | transfer | false accept | decisions | claims chosen / decision | mean end P(repaired) "
-            "| agent turns / success | errors |", "|" + "---|" * 11]
+            "| agent turns / success | budget fallbacks / decisions | errors |", "|" + "---|" * 12]
     for fn in files:
         R = [json.loads(l) for l in Path(fn).read_text().splitlines() if l.strip()]
         err = sum(1 for r in R if "error" in r)
@@ -102,7 +103,8 @@ def summarize(files: list) -> str:
         pr = [r["p_repaired_end"] for r in R if r["p_repaired_end"] is not None]
         rows.append(f"| {Path(fn).name} | {n} | {len(ok)} | {sum(r['claimed'] for r in R)} | {sum(r['transferred'] for r in R)} | "
                     f"{sum(r['false_accept'] for r in R)} | {dec} | {cl}/{dec} | {sum(pr) / len(pr) if pr else float('nan'):.3f} | "
-                    f"{sum(r['agent_turns'] for r in ok) / len(ok) if ok else float('nan'):.1f} | {err} |")
+                    f"{sum(r['agent_turns'] for r in ok) / len(ok) if ok else float('nan'):.1f} | "
+                    f"{sum(r['fallbacks'] for r in R) if all('fallbacks' in r for r in R) else 'n/a'}/{dec} | {err} |")
     return "\n".join(rows)
 
 
