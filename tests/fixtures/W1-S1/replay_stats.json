@@ -1,0 +1,40 @@
+{
+ "bad_vpn_prefixes": 38,
+ "calls": 1299,
+ "error_tool_messages": 252,
+ "hallucinated_calls": 89,
+ "intents": {
+  "mms_issue": 29,
+  "mobile_data_issue": 56,
+  "service_issue": 15
+ },
+ "length_hist": {
+  "3": 7,
+  "4": 7,
+  "5": 5,
+  "6": 5,
+  "7": 4,
+  "8": 7,
+  "9": 5,
+  "10": 3,
+  "12": 5,
+  "13": 5,
+  "14": 4,
+  "15": 5,
+  "16": 3,
+  "17": 4,
+  "18": 3,
+  "19": 6,
+  "20": 3,
+  "21": 2,
+  "22": 5,
+  "23": 7,
+  "24": 2,
+  "25": 3
+ },
+ "make_payment_calls": 52,
+ "multi_call_messages": 130,
+ "prefixes": 100,
+ "refuel_calls": 111,
+ "write_share": 0.613
+}

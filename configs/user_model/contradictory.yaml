@@ -1,0 +1,8 @@
+# [telecom_boed] PLACEHOLDER persona prior (to be fitted on train-split logs). Acts correctly but reports inconsistently.
+name: contradictory
+compliance_q: 0.85
+eps_double: 0.03
+eps_extra: 0.03
+default_mention_p: 0.7
+eps_conf: 0.3
+report_when_not_done: uniform

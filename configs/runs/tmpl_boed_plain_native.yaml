@@ -1,0 +1,20 @@
+# [telecom_boed] run config (immutable once used: add a new named config, never edit).
+# TEMPLATE (status: template): boed-plain + native tau2 user.
+# Copy to a new named config before use; the registered names/kwargs may still change (W3-S11/S12).
+name: tmpl_boed_plain_native
+status: template
+agent: boed-plain
+user: user_simulator
+domain: telecom
+split: train
+num_trials: 1
+seed: 300
+max_steps: 200
+max_concurrency: 4
+max_errors: 10
+llm:
+  model: hosted_vllm/Qwen/Qwen3-8B     # agent AND user (the P3 baseline used the same model for both)
+  temperature: 0.0
+  extra_body: {chat_template_kwargs: {enable_thinking: false}}   # Qwen3 non-thinking (Hermes tool parser on the server)
+boed_config: configs/boed_default.yaml
+eval_final: false

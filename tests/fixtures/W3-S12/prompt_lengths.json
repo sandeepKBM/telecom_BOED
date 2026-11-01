@@ -1,0 +1,20 @@
+{
+ "Easy/confused": 3310,
+ "Easy/contradictory": 3253,
+ "Easy/cooperative": 3201,
+ "Easy/delayed": 3252,
+ "Easy/noncompliant": 3256,
+ "Easy/terse": 3233,
+ "Hard/confused": 3298,
+ "Hard/contradictory": 3241,
+ "Hard/cooperative": 3189,
+ "Hard/delayed": 3240,
+ "Hard/noncompliant": 3244,
+ "Hard/terse": 3221,
+ "None/confused": 3298,
+ "None/contradictory": 3241,
+ "None/cooperative": 3189,
+ "None/delayed": 3240,
+ "None/noncompliant": 3244,
+ "None/terse": 3221
+}

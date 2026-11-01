@@ -1,0 +1,13 @@
+{
+ "task_ids": [
+  "[service_issue]airplane_mode_on|break_apn_settings|contract_end_suspension|unseat_sim_card[PERSONA:Easy]",
+  "[mms_issue]bad_network_preference|user_abroad_roaming_disabled_on[PERSONA:None]",
+  "[mobile_data_issue]airplane_mode_on|bad_network_preference[PERSONA:Hard]",
+  "[service_issue]airplane_mode_on|unseat_sim_card[PERSONA:None]",
+  "[mms_issue]airplane_mode_on|bad_network_preference|bad_wifi_calling|break_apn_mms_setting|break_app_both_permissions|data_mode_off|data_usage_exceeded|unseat_sim_card|user_abroad_roaming_disabled_off[PERSONA:Hard]"
+ ],
+ "transfer": [
+  "[service_issue]airplane_mode_on|break_apn_settings|contract_end_suspension|unseat_sim_card[PERSONA:Easy]"
+ ],
+ "note": "5 TRAIN tasks: 1 transfer + shortest per intent + longest mixed user/assistant"
+}

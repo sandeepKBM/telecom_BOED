@@ -1,0 +1,8 @@
+# [telecom_boed] PLACEHOLDER persona prior (to be fitted on train-split logs). Does the task, says little.
+name: terse
+compliance_q: 0.9
+eps_double: 0.02
+eps_extra: 0.02
+default_mention_p: 0.4
+eps_conf: 0.03
+report_when_not_done: uniform

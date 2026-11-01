@@ -1,0 +1,22 @@
+# [telecom_boed] W2-S5 user-model parameters that configs/boed_default.yaml does NOT carry (base layer).
+# Merge order (later wins): boed_default.yaml `user_model:` < user_model/default.yaml < user_model/<persona>.yaml.
+# The four numbers already in boed_default.yaml (compliance_q 0.9, eps_double 0.02, eps_extra 0.02, default_mention_p 0.7)
+# are the "default" persona and are NOT repeated here, so there is one source of truth for them.
+# EVERYTHING IN THIS DIRECTORY IS A PLACEHOLDER PRIOR. These are to be fitted on train-split dialogue logs (per-persona
+# compliance, mention rates and report accuracy) before any reported result relies on them.
+name: user_model_default
+# eps_conf: probability that a user report of a mentioned field group is garbled. A garbled report is a uniformly random
+# draw from the closed label space of that group (observed tuples in the current support), so the report distribution is
+# (1 - eps_conf) * [report == truth] + eps_conf * Uniform(label space).  (belief/filter.py module docstring, "report model")
+eps_conf: 0.05
+# report_when_not_done: what the user says when they did NOT run the requested tool.
+#   uniform     - a uniformly random label-space draw (the user improvises; uninformative about the state)
+#   claims_done - the user reports what the tool WOULD have shown had they run it (hallucinated compliance; the report
+#                 then carries real information about the state but none about whether the action happened)
+report_when_not_done: uniform
+# mention_boost: per output-group multiplier on the persona's default_mention_p (P(a reply mentions the group) =
+# min(1, default_mention_p * boost)). Group = text before the first "." of a featurize() field name (status_bar,
+# speed_test, mms, ...). Unlisted groups use boost 1. Persona files inherit this map (deep merge) unless they set it.
+mention_boost:
+  speed_test: 1.3     # the number is the point of the test, users nearly always quote it
+  mms: 1.3            # a yes/no outcome that is the user's actual complaint

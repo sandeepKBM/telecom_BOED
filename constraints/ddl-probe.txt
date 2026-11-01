@@ -1,0 +1,14 @@
+# ddl-probe env (CPU probes: scripts/h7_probe_eval.py). Westeros node-local, off the NFS quota. Rebuild:
+#   CONDA_PKGS_DIRS=/data/local/ss5772/conda_pkgs /common/users/ss5772/miniforge3/bin/mamba create -y -p /data/local/ss5772/conda_envs/ddl-probe -c conda-forge python=3.12 numpy scipy scikit-learn=1.7.2 safetensors
+#   then check: env -u PYTHONPATH PYTHONNOUSERSITE=1 python -s -m pip list --format=freeze == this file. python 3.12.16
+cloudpickle==3.1.2
+joblib==1.6.0
+numpy==2.5.4
+packaging==26.3
+pip==26.2.2
+safetensors==0.8.0
+scikit-learn==1.7.2
+scipy==1.18.1
+setuptools==84.2.1
+threadpoolctl==3.7.0
+wheel==0.48.0

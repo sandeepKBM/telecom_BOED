@@ -1,0 +1,16 @@
+{
+  "_note": "Hand-written W2-S7 first-user-message fixtures (author's own paraphrases of the tau2 reason_for_call texts).",
+  "cases": [
+    {"text": "Hi, my phone has been showing 'No Service' for the past few hours.", "intent": "service_issue"},
+    {"text": "I have no signal at all and I can't make calls.", "intent": "service_issue"},
+    {"text": "My phone says no bars and emergency calls only.", "intent": "service_issue"},
+    {"text": "My mobile data is really slow, it either stops working or crawls.", "intent": "mobile_data_issue"},
+    {"text": "The internet on my phone is not working and web pages take forever to load.", "intent": "mobile_data_issue"},
+    {"text": "I have terrible data speeds and I want excellent speed back.", "intent": "mobile_data_issue"},
+    {"text": "I'm unable to send MMS messages with my messaging app.", "intent": "mms_issue"},
+    {"text": "I can't send pictures to my friends in a text.", "intent": "mms_issue"},
+    {"text": "Photo messages won't go through.", "intent": "mms_issue"},
+    {"text": "I have no service and also my internet is slow when it does work.", "mixed": ["service_issue", "mobile_data_issue"]},
+    {"text": "Hello, I need help with my phone.", "uniform": true}
+  ]
+}

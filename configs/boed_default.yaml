@@ -1,0 +1,43 @@
+# [telecom_boed] Default BOED / reach-avoid knobs (contract v1). NEVER edit in place: copy to a new named config.
+# These are starting values for construction and tests. They are not tuned. Every run records the config hash.
+# Units: cost is in "turn units". One agent turn = 1 turn unit; see turn_cost / tool_cost.
+name: boed_default
+contract_version: 1
+
+cost:
+  lambda: 0.02           # λ: utility price of one turn unit (eqs. 1-4)
+  turn_cost: 1.0         # C(a) for one agent message to the user
+  tool_cost: 0.25        # C(a) for one backend tool call (it also uses up tau2 max_steps)
+  rho: 0.5               # ρ: weight on the risk penalty R(a) (decide/risk.py table)
+  budget_B: 30.0         # B: budget in turn units; C > B counts as failure in eq. 4
+
+utility:
+  c_FA: 1.0              # penalty for a false acceptance (claim_resolved while grade = 0)
+  c_esc: 0.3             # penalty for an unnecessary transfer (escalating a fixable fault)
+
+reach_avoid:
+  gamma: 1.0             # γ in eq. 4 (finite horizon via budget_B)
+  delta: 0.1             # commit only if P_β(repaired) >= 1 - δ
+  eta: 0.05              # escalate if max_a Q(β, a) < η
+  p_star: 0.9            # margin-variant target level ℓ(β) = P_β(repaired) - p*
+  v_lr: 10.0             # likelihood-ratio threshold that sets v = 1 (contracts.py docstring)
+
+lookahead:
+  depth_k: 3             # expectimax depth (k-step baseline and reach-avoid oracle)
+  inner_m: 6             # inner-node action set: heuristic order ∪ top-m by myopic DUG
+  memo_round: 1.0e-9     # weight rounding for memo keys
+
+user_model:
+  compliance_q: 0.9      # P(user performs a requested device action exactly once)
+  eps_double: 0.02       # P(user performs it twice; matters for toggles)
+  eps_extra: 0.02        # P(user also performs one unrequested mutating action, e.g. reboot_device)
+  default_mention_p: 0.7 # P(a user reply mentions a given field of the tool output), before per-persona fits
+
+controller:
+  n_candidates: 4        # N Qwen samples per agent turn (boed-controller)
+  candidate_temperature: 0.7
+  override: filter_commit   # none | filter_commit | full
+  scorer: reach          # dug | kstep | reach | eig | heuristic
+
+latency:
+  p95_scoring_ms: 500    # budget for one controller decision on the 1,984-particle mms support

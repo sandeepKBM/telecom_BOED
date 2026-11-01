@@ -1,0 +1,66 @@
+{
+ "note": "W2-S9 inputs (train split only): hypotheses (fault sets) used by tests/test_controller.py real-support tests; first one feeds the smoke test.",
+ "train_hypotheses": {
+  "mobile_data_issue": [
+   [
+    "airplane_mode_on",
+    "bad_network_preference"
+   ],
+   [
+    "data_saver_mode_on",
+    "data_usage_exceeded"
+   ],
+   [
+    "bad_network_preference",
+    "data_saver_mode_on",
+    "data_usage_exceeded"
+   ],
+   [
+    "bad_network_preference",
+    "bad_vpn",
+    "data_mode_off",
+    "data_saver_mode_on"
+   ],
+   [
+    "bad_network_preference",
+    "data_mode_off",
+    "data_saver_mode_on",
+    "data_usage_exceeded",
+    "user_abroad_roaming_disabled_off"
+   ]
+  ],
+  "mms_issue": [
+   [
+    "bad_network_preference",
+    "user_abroad_roaming_disabled_off"
+   ],
+   [
+    "break_apn_mms_setting",
+    "data_mode_off",
+    "user_abroad_roaming_disabled_on"
+   ],
+   [
+    "bad_wifi_calling",
+    "break_apn_mms_setting",
+    "break_app_sms_permission",
+    "data_usage_exceeded"
+   ],
+   [
+    "bad_wifi_calling",
+    "break_apn_mms_setting",
+    "data_mode_off",
+    "data_usage_exceeded",
+    "unseat_sim_card"
+   ],
+   [
+    "bad_network_preference",
+    "bad_wifi_calling",
+    "break_apn_mms_setting",
+    "break_app_storage_permission",
+    "data_mode_off",
+    "data_usage_exceeded",
+    "unseat_sim_card"
+   ]
+  ]
+ }
+}

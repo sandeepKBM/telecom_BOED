@@ -1,0 +1,391 @@
+{
+ "can_send_mms": [
+  "mms.can_send"
+ ],
+ "check_apn_settings": [
+  "apn.mmsc_set",
+  "apn.mmsc_url",
+  "apn.name"
+ ],
+ "check_app_permissions": [
+  "app_permissions.app",
+  "app_permissions.found",
+  "app_permissions.perm.network",
+  "app_permissions.perm.phone",
+  "app_permissions.perm.sms",
+  "app_permissions.perm.storage",
+  "app_permissions.permissions"
+ ],
+ "check_app_status": [
+  "app_status.app",
+  "app_status.found",
+  "app_status.perm.network",
+  "app_status.perm.phone",
+  "app_status.perm.sms",
+  "app_status.perm.storage",
+  "app_status.permissions"
+ ],
+ "check_data_restriction_status": [
+  "data_restriction.data_saver"
+ ],
+ "check_installed_apps": [
+  "apps.installed"
+ ],
+ "check_network_mode_preference": [
+  "network_mode.preference"
+ ],
+ "check_network_status": [
+  "network.airplane_mode",
+  "network.connection",
+  "network.data_enabled",
+  "network.roaming_enabled",
+  "network.signal",
+  "network.sim_status",
+  "network.tech",
+  "network.wifi_connected",
+  "network.wifi_enabled",
+  "network.wifi_ssid"
+ ],
+ "check_payment_request": [
+  "payment_request.amount",
+  "payment_request.bill_id",
+  "payment_request.pending"
+ ],
+ "check_sim_status": [
+  "sim.status"
+ ],
+ "check_status_bar": [
+  "status_bar.airplane_mode",
+  "status_bar.battery",
+  "status_bar.data",
+  "status_bar.data_saver",
+  "status_bar.signal",
+  "status_bar.tech",
+  "status_bar.vpn",
+  "status_bar.wifi",
+  "status_bar.wifi_ssid"
+ ],
+ "check_vpn_status": [
+  "vpn.connected",
+  "vpn.enabled_setting",
+  "vpn.performance",
+  "vpn.protocol",
+  "vpn.server_address"
+ ],
+ "check_wifi_calling_status": [
+  "wifi_calling.enabled"
+ ],
+ "check_wifi_status": [
+  "wifi.connected",
+  "wifi.enabled",
+  "wifi.signal",
+  "wifi.ssid"
+ ],
+ "connect_vpn": [
+  "connect_vpn.msg",
+  "status_bar.airplane_mode",
+  "status_bar.battery",
+  "status_bar.data",
+  "status_bar.data_saver",
+  "status_bar.signal",
+  "status_bar.tech",
+  "status_bar.vpn",
+  "status_bar.wifi",
+  "status_bar.wifi_ssid",
+  "vpn.action"
+ ],
+ "disable_roaming": [
+  "roaming_action.result"
+ ],
+ "disconnect_vpn": [
+  "disconnect_vpn.msg",
+  "status_bar.airplane_mode",
+  "status_bar.battery",
+  "status_bar.data",
+  "status_bar.data_saver",
+  "status_bar.signal",
+  "status_bar.tech",
+  "status_bar.vpn",
+  "status_bar.wifi",
+  "status_bar.wifi_ssid",
+  "vpn.action"
+ ],
+ "enable_roaming": [
+  "roaming_action.result"
+ ],
+ "get_bills_for_customer": [
+  "bills.has_awaiting_payment",
+  "bills.ids",
+  "bills.n",
+  "bills.n_overdue",
+  "bills.statuses",
+  "bills.total_due"
+ ],
+ "get_customer_by_id": [
+  "customer.account_status",
+  "customer.bill_ids",
+  "customer.id",
+  "customer.line_ids",
+  "customer.name",
+  "customer.phone_number"
+ ],
+ "get_customer_by_name": [
+  "customer.account_status",
+  "customer.bill_ids",
+  "customer.id",
+  "customer.line_ids",
+  "customer.name",
+  "customer.phone_number",
+  "customers.n"
+ ],
+ "get_customer_by_phone": [
+  "customer.account_status",
+  "customer.bill_ids",
+  "customer.id",
+  "customer.line_ids",
+  "customer.name",
+  "customer.phone_number"
+ ],
+ "get_data_usage": [
+  "data_usage.cycle_end_date",
+  "data_usage.exceeded",
+  "data_usage.limit_gb",
+  "data_usage.line_id",
+  "data_usage.refueling_gb",
+  "data_usage.used_gb"
+ ],
+ "get_details_by_id": [
+  "bill.due_date",
+  "bill.id",
+  "bill.n_items",
+  "bill.status",
+  "bill.total_due",
+  "customer.account_status",
+  "customer.bill_ids",
+  "customer.id",
+  "customer.line_ids",
+  "customer.name",
+  "customer.phone_number",
+  "device.activated",
+  "device.id",
+  "device.is_esim_capable",
+  "device.type",
+  "line.contract_end_date",
+  "line.data_refueling_gb",
+  "line.data_used_gb",
+  "line.device_id",
+  "line.id",
+  "line.plan_id",
+  "line.roaming_enabled",
+  "line.status",
+  "line.suspension_start_date",
+  "plan.data_limit_gb",
+  "plan.id",
+  "plan.name",
+  "plan.price_per_month",
+  "plan.refuel_price_per_gb"
+ ],
+ "grant_app_permission": [
+  "app_permission.grant_ok",
+  "grant_app_permission.msg",
+  "status_bar.airplane_mode",
+  "status_bar.battery",
+  "status_bar.data",
+  "status_bar.data_saver",
+  "status_bar.signal",
+  "status_bar.tech",
+  "status_bar.vpn",
+  "status_bar.wifi",
+  "status_bar.wifi_ssid"
+ ],
+ "make_payment": [
+  "make_payment.amount",
+  "make_payment.bill_id",
+  "make_payment.paid"
+ ],
+ "reboot_device": [
+  "reboot.apn_reset",
+  "reboot_device.msg",
+  "status_bar.airplane_mode",
+  "status_bar.battery",
+  "status_bar.data",
+  "status_bar.data_saver",
+  "status_bar.signal",
+  "status_bar.tech",
+  "status_bar.vpn",
+  "status_bar.wifi",
+  "status_bar.wifi_ssid"
+ ],
+ "refuel_data": [
+  "refuel.charge",
+  "refuel.message",
+  "refuel.new_refueling_gb"
+ ],
+ "reseat_sim_card": [
+  "reseat_sim_card.msg",
+  "sim.reseated",
+  "status_bar.airplane_mode",
+  "status_bar.battery",
+  "status_bar.data",
+  "status_bar.data_saver",
+  "status_bar.signal",
+  "status_bar.tech",
+  "status_bar.vpn",
+  "status_bar.wifi",
+  "status_bar.wifi_ssid"
+ ],
+ "reset_apn_settings": [
+  "apn.reset_pending",
+  "reset_apn_settings.msg",
+  "status_bar.airplane_mode",
+  "status_bar.battery",
+  "status_bar.data",
+  "status_bar.data_saver",
+  "status_bar.signal",
+  "status_bar.tech",
+  "status_bar.vpn",
+  "status_bar.wifi",
+  "status_bar.wifi_ssid"
+ ],
+ "resume_line": [
+  "line.contract_end_date",
+  "line.data_refueling_gb",
+  "line.data_used_gb",
+  "line.device_id",
+  "line.id",
+  "line.plan_id",
+  "line.roaming_enabled",
+  "line.status",
+  "line.suspension_start_date",
+  "line_action.message"
+ ],
+ "run_speed_test": [
+  "speed_test.desc",
+  "speed_test.mbps",
+  "speed_test.ok"
+ ],
+ "send_payment_request": [
+  "payment_request_sent.bill_id"
+ ],
+ "set_apn_settings": [
+  "apn.set",
+  "set_apn_settings.msg",
+  "status_bar.airplane_mode",
+  "status_bar.battery",
+  "status_bar.data",
+  "status_bar.data_saver",
+  "status_bar.signal",
+  "status_bar.tech",
+  "status_bar.vpn",
+  "status_bar.wifi",
+  "status_bar.wifi_ssid"
+ ],
+ "set_network_mode_preference": [
+  "network_mode.invalid",
+  "network_mode.set",
+  "set_network_mode_preference.msg",
+  "status_bar.airplane_mode",
+  "status_bar.battery",
+  "status_bar.data",
+  "status_bar.data_saver",
+  "status_bar.signal",
+  "status_bar.tech",
+  "status_bar.vpn",
+  "status_bar.wifi",
+  "status_bar.wifi_ssid"
+ ],
+ "suspend_line": [
+  "line.contract_end_date",
+  "line.data_refueling_gb",
+  "line.data_used_gb",
+  "line.device_id",
+  "line.id",
+  "line.plan_id",
+  "line.roaming_enabled",
+  "line.status",
+  "line.suspension_start_date",
+  "line_action.message"
+ ],
+ "toggle_airplane_mode": [
+  "airplane_mode.now",
+  "status_bar.airplane_mode",
+  "status_bar.battery",
+  "status_bar.data",
+  "status_bar.data_saver",
+  "status_bar.signal",
+  "status_bar.tech",
+  "status_bar.vpn",
+  "status_bar.wifi",
+  "status_bar.wifi_ssid",
+  "toggle_airplane_mode.msg"
+ ],
+ "toggle_data": [
+  "data.now",
+  "status_bar.airplane_mode",
+  "status_bar.battery",
+  "status_bar.data",
+  "status_bar.data_saver",
+  "status_bar.signal",
+  "status_bar.tech",
+  "status_bar.vpn",
+  "status_bar.wifi",
+  "status_bar.wifi_ssid",
+  "toggle_data.msg"
+ ],
+ "toggle_data_saver_mode": [
+  "data_saver.now",
+  "status_bar.airplane_mode",
+  "status_bar.battery",
+  "status_bar.data",
+  "status_bar.data_saver",
+  "status_bar.signal",
+  "status_bar.tech",
+  "status_bar.vpn",
+  "status_bar.wifi",
+  "status_bar.wifi_ssid",
+  "toggle_data_saver_mode.msg"
+ ],
+ "toggle_roaming": [
+  "roaming.now",
+  "status_bar.airplane_mode",
+  "status_bar.battery",
+  "status_bar.data",
+  "status_bar.data_saver",
+  "status_bar.signal",
+  "status_bar.tech",
+  "status_bar.vpn",
+  "status_bar.wifi",
+  "status_bar.wifi_ssid",
+  "toggle_roaming.msg"
+ ],
+ "toggle_wifi": [
+  "status_bar.airplane_mode",
+  "status_bar.battery",
+  "status_bar.data",
+  "status_bar.data_saver",
+  "status_bar.signal",
+  "status_bar.tech",
+  "status_bar.vpn",
+  "status_bar.wifi",
+  "status_bar.wifi_ssid",
+  "toggle_wifi.msg",
+  "wifi.blocked_by_airplane",
+  "wifi.now"
+ ],
+ "toggle_wifi_calling": [
+  "status_bar.airplane_mode",
+  "status_bar.battery",
+  "status_bar.data",
+  "status_bar.data_saver",
+  "status_bar.signal",
+  "status_bar.tech",
+  "status_bar.vpn",
+  "status_bar.wifi",
+  "status_bar.wifi_ssid",
+  "toggle_wifi_calling.msg",
+  "wifi_calling.now"
+ ],
+ "transfer_to_human_agents": [
+  "transfer.ok"
+ ]
+}

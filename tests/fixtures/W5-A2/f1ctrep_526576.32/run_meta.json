@@ -1,0 +1,14 @@
+{
+ "host": "rlab2.cs.rutgers.edu",
+ "tau2_sha": "4ce7c0397c1eb65c9bbe59aeacfe1ca44a1cd699",
+ "contract_version": 1,
+ "mode": "config",
+ "patches": [
+  "H1: TelecomUserTools.__init__ gives each instance a private deep copy of the pristine default_vpn_details (class-attribute alias corrupted by break_vpn)",
+  "H2: tau2.domains.telecom.tools.uuid -> shim; bill id = sha256(customer_id|n_bills[|salt]) so _apply_one_time_charge is deterministic and a function of DB content only"
+ ],
+ "run_config": {
+  "name": "smoke_boedctrl_reach_repair_native_train5",
+  "sha256": "f9bd463b0ab23913ce23cf210bec3dda4cbce319e2609d1bd8eafb630b18a482"
+ }
+}

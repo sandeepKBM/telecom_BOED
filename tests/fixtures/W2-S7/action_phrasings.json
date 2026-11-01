@@ -1,0 +1,128 @@
+{
+  "_note": "Hand-written W2-S7 phrasings (the author's own, modelled on tech_support_manual.md wording). Each tool must be reachable from >= 2 of them; ensure/args are checked when given.",
+  "check_status_bar": [
+    {"text": "Could you check your phone's status bar and tell me what icons you see?"},
+    {"text": "Please look at the top of your screen. How many signal bars do you have?"},
+    {"text": "Can you run check_status_bar and read me the result?"}
+  ],
+  "check_network_status": [
+    {"text": "Please check your network status and tell me what it says."},
+    {"text": "Let's look at your cellular connection status, can you check that for me?"}
+  ],
+  "check_network_mode_preference": [
+    {"text": "Can you check what network mode your phone is set to?"},
+    {"text": "Please check your preferred network type and tell me what it shows."}
+  ],
+  "set_network_mode_preference": [
+    {"text": "Please set your network mode preference to 4g_5g_preferred.", "args": {"mode": "4g_5g_preferred"}},
+    {"text": "Could you change your network mode to 4G/5G?", "args": {"mode": "4g_5g_preferred"}},
+    {"text": "Let's switch your preferred network type to 3G only.", "args": {"mode": "3g_only"}}
+  ],
+  "run_speed_test": [
+    {"text": "Please run a speed test and tell me the result."},
+    {"text": "Can you check your internet speed for me?"}
+  ],
+  "toggle_airplane_mode": [
+    {"text": "Please turn off airplane mode.", "ensure": ["airplane_mode", false]},
+    {"text": "Could you switch Airplane Mode on?", "ensure": ["airplane_mode", true]},
+    {"text": "Make sure airplane mode is off.", "ensure": ["airplane_mode", false]}
+  ],
+  "check_sim_status": [
+    {"text": "Can you check the status of your SIM card?"},
+    {"text": "Please check your SIM status and tell me what it says."}
+  ],
+  "reseat_sim_card": [
+    {"text": "Please reseat your SIM card."},
+    {"text": "Could you remove and reinsert your SIM card?"}
+  ],
+  "toggle_data": [
+    {"text": "Please turn on mobile data.", "ensure": ["data", true]},
+    {"text": "Can you enable your cellular data?", "ensure": ["data", true]},
+    {"text": "Turn off your mobile data for a moment.", "ensure": ["data", false]}
+  ],
+  "toggle_roaming": [
+    {"text": "Please turn on data roaming.", "ensure": ["roaming", true]},
+    {"text": "Make sure roaming is enabled.", "ensure": ["roaming", true]}
+  ],
+  "check_data_restriction_status": [
+    {"text": "Can you check whether data saver mode is on?"},
+    {"text": "Please check your data saver status."}
+  ],
+  "toggle_data_saver_mode": [
+    {"text": "Please turn off data saver mode.", "ensure": ["data_saver", false]},
+    {"text": "Could you disable Data Saver?", "ensure": ["data_saver", false]}
+  ],
+  "check_apn_settings": [
+    {"text": "Can you check your APN settings and read me the APN name and MMSC URL?"},
+    {"text": "Please look at your APN configuration."}
+  ],
+  "set_apn_settings": [
+    {"text": "Please set your APN settings to internet."},
+    {"text": "Could you change your APN to the internet profile?"}
+  ],
+  "reset_apn_settings": [
+    {"text": "Please reset your APN settings."},
+    {"text": "Can you reset the APN to its default settings?"}
+  ],
+  "check_wifi_status": [
+    {"text": "Can you check your wifi status?"},
+    {"text": "Please check whether Wi-Fi is on and connected."}
+  ],
+  "toggle_wifi": [
+    {"text": "Please turn off Wi-Fi.", "ensure": ["wifi", false]},
+    {"text": "Could you turn your wifi back on?", "ensure": ["wifi", true]}
+  ],
+  "check_wifi_calling_status": [
+    {"text": "Can you check whether Wi-Fi calling is on?"},
+    {"text": "Please check your wifi calling status."}
+  ],
+  "toggle_wifi_calling": [
+    {"text": "Please turn off Wi-Fi calling.", "ensure": ["wifi_calling", false]},
+    {"text": "Could you enable wifi calling?", "ensure": ["wifi_calling", true]}
+  ],
+  "check_vpn_status": [
+    {"text": "Can you check your VPN status?"},
+    {"text": "Please check if you have a VPN connected."}
+  ],
+  "connect_vpn": [
+    {"text": "Please connect to the VPN.", "ensure": ["vpn", true]},
+    {"text": "Could you turn on your VPN?", "ensure": ["vpn", true]}
+  ],
+  "disconnect_vpn": [
+    {"text": "Please disconnect from the VPN.", "ensure": ["vpn", false]},
+    {"text": "Could you turn off your VPN?", "ensure": ["vpn", false]}
+  ],
+  "check_installed_apps": [
+    {"text": "Can you check which apps are installed on your phone?"},
+    {"text": "Please check the list of installed apps."}
+  ],
+  "check_app_status": [
+    {"text": "Please check the app status of the messaging app.", "args": {"app_name": "messaging"}},
+    {"text": "Can you check the status of the messaging app?", "args": {"app_name": "messaging"}}
+  ],
+  "check_app_permissions": [
+    {"text": "Can you check what permissions the messaging app has?", "args": {"app_name": "messaging"}},
+    {"text": "Please check the messaging app's permissions."}
+  ],
+  "grant_app_permission": [
+    {"text": "Please grant the messaging app the storage permission.", "args": {"app_name": "messaging", "permission": "storage"}},
+    {"text": "Could you give the messaging app permission to access sms?", "args": {"app_name": "messaging", "permission": "sms"}}
+  ],
+  "can_send_mms": [
+    {"text": "Can you try sending a picture message and tell me if it goes through?"},
+    {"text": "Please test whether you can send an MMS."}
+  ],
+  "reboot_device": [
+    {"text": "Please restart your phone."},
+    {"text": "Could you reboot your device and let me know when it is back on?"},
+    {"text": "Try turning your phone off and on again."}
+  ],
+  "check_payment_request": [
+    {"text": "Can you check whether you received a payment request?"},
+    {"text": "Please check if there is a payment request on your account."}
+  ],
+  "make_payment": [
+    {"text": "Please approve the payment."},
+    {"text": "Could you go ahead and pay the bill?"}
+  ]
+}

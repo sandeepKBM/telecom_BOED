@@ -1,0 +1,54 @@
+diff --git a/verl/workers/rollout/llm_server.py b/verl/workers/rollout/llm_server.py
+--- a/verl/workers/rollout/llm_server.py
++++ b/verl/workers/rollout/llm_server.py
+@@ -106,6 +106,7 @@
+         video_data: Optional[list[Any]] = None,
+         audio_data: Optional[list[Any]] = None,
+         mm_processor_kwargs: Optional[dict[str, Any]] = None,
++        use_lora: bool = True,
+         **kwargs: Any,
+     ) -> TokenOutput:
+         """Generate tokens from prompt ids.
+@@ -147,6 +148,8 @@
+             priority_kwargs = (
+                 {"priority": priority} if priority != 0 and self.config.actor_rollout_ref.rollout.name == "vllm" else {}
+             )
++            # [ddl patch] forward only when False so the default call is identical to upstream.
++            lora_kwargs = {} if use_lora else {"use_lora": False}
+             output: TokenOutput = await server.generate.remote(
+                 request_id=self._vllm_request_id(request_id),  # use new request_id for each turn
+                 prompt_ids=prompt_ids,
+@@ -155,6 +158,7 @@
+                 video_data=video_data,
+                 **multimodal_kwargs,
+                 **priority_kwargs,
++                **lora_kwargs,
+                 **kwargs,
+             )
+             global_steps = output.extra_fields.get("global_steps")
+diff --git a/verl/workers/rollout/vllm_rollout/vllm_async_server.py b/verl/workers/rollout/vllm_rollout/vllm_async_server.py
+--- a/verl/workers/rollout/vllm_rollout/vllm_async_server.py
++++ b/verl/workers/rollout/vllm_rollout/vllm_async_server.py
+@@ -566,11 +566,13 @@
+         mm_processor_kwargs: Optional[dict[str, Any]] = None,
+         priority: int = 0,
+         kv_transfer_params: Optional[dict] = None,
++        use_lora: bool = True,
+     ) -> TokenOutput:
+         """Generate sequence with token-in-token-out.
+ 
+         Args:
+             kv_transfer_params: vLLM KV-transfer payload for PD requests.
++            use_lora: [ddl patch] False sends lora_request=None (frozen base model) on this request.
+         """
+         if self._disaggregation_role == "prefill" and self._pd_decode_peers and kv_transfer_params is None:
+             return await self._pd_dispatch(
+@@ -651,7 +653,7 @@
+ 
+         # Add lora request
+         lora_request = None
+-        if self.lora_as_adapter:
++        if self.lora_as_adapter and use_lora:
+             # Make sure we also check that the lora is already loaded in the engine
+             lora_loaded = VLLM_LORA_INT_ID in await self.engine.list_loras()
+             if lora_loaded:

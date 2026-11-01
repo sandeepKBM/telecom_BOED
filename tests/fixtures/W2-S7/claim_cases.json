@@ -1,0 +1,27 @@
+{
+  "_note": "Hand-written W2-S7 labelled sentences (the author's own; accuracy on them is NOT evidence of real accuracy). claim=true iff the agent message asserts the user's issue is resolved/working (the commit), even if it also invites more help.",
+  "cases": [
+    {"text": "Your issue should now be resolved. Is there anything else I can help you with?", "claim": true},
+    {"text": "Everything is working now, so you are all set.", "claim": true},
+    {"text": "Glad I could help! Is there anything else you need today?", "claim": true},
+    {"text": "I've fixed the problem with your mobile data, you should be back to normal.", "claim": true},
+    {"text": "Great, your phone is working again and the problem has been resolved.", "claim": true},
+    {"text": "You should now be able to send picture messages without any trouble.", "claim": true},
+    {"text": "That should fix it. Your service is restored.", "claim": true},
+    {"text": "The issue has been fixed. Feel free to reach out if you need anything else.", "claim": true},
+    {"text": "I'm happy to confirm that your MMS is working now.", "claim": true},
+    {"text": "All set, your data connection is back up and running.", "claim": true},
+    {"text": "Let's verify by running a speed test.", "claim": false},
+    {"text": "Can you please check the status bar and tell me what you see?", "claim": false},
+    {"text": "Please turn off airplane mode and let me know whether the signal comes back.", "claim": false},
+    {"text": "Is it working now?", "claim": false},
+    {"text": "I'll check your account to see whether the line is suspended.", "claim": false},
+    {"text": "To fix this, we need to reset your APN settings and then restart your phone.", "claim": false},
+    {"text": "Next, I'd like you to reseat your SIM card, then try again.", "claim": false},
+    {"text": "Thanks for that. Your data usage is below the limit, so that is not the cause.", "claim": false},
+    {"text": "I'm sorry you're having trouble. Could you tell me which phone you are using?", "claim": false},
+    {"text": "I will transfer you to a human agent who can unlock the SIM.", "claim": false},
+    {"text": "Please restart your phone. Once it is back on, run a speed test so we can confirm it is fixed.", "claim": false},
+    {"text": "Your roaming is now enabled on the account. Please turn on data roaming on your phone.", "claim": false}
+  ]
+}

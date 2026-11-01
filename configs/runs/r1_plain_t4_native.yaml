@@ -1,0 +1,20 @@
+# [telecom_boed] run config (immutable once used: add a new named config, never edit). P2 re-baseline (R1), 2026-10-31.
+# P2 arm 1: plain tau2 llm_agent (no repair), TRAIN split (74 tasks), native user, 4 trial(s). Copied from p4_plain_native; differs: boed_config -> boed_v2 (P0 fixes), num_trials 4.
+# Mix runs are derived by eval/runner.py as <name minus _native>__<persona>.yaml. Serving stays default (non-deterministic, D-a not chosen).
+name: r1_plain_t4_native
+status: ready
+agent: llm_agent
+user: user_simulator
+domain: telecom
+split: train
+num_trials: 4
+seed: 300
+max_steps: 200
+max_concurrency: 4
+max_errors: 10
+llm:
+  model: hosted_vllm/Qwen/Qwen3-8B     # agent AND user
+  temperature: 0.0
+  extra_body: {chat_template_kwargs: {enable_thinking: false}}
+boed_config: configs/boed_v2.yaml
+eval_final: false

@@ -1,0 +1,7 @@
+{"t": "2026-10-16T04:18:56-04:00", "run": "f1plrep_526576.35", "phase": "step_start", "host": "rlab2.cs.rutgers.edu", "job": 526576, "step": 35, "gpu": 0, "mode": "launch", "split": "train", "trials": 1, "conc": 3, "seed": 300, "max_steps": 200, "num_tasks": ""}
+{"t": "2026-10-16T04:21:58-04:00", "run": "f1plrep_526576.35", "phase": "vllm_ready", "ready_s": 176, "port": 8081, "gpu_mem_MiB": 35717}
+{"t": "2026-10-16T04:21:58-04:00", "run": "f1plrep_526576.35", "phase": "tau2_start"}
+{"t": "2026-10-16T04:21:58-04:00", "run": "f1plrep_526576.35", "phase": "progress", "elapsed_s": 0, "sims_done": 0, "prefix_cache_queries_total": 0.0, "prefix_cache_hits_total": 0.0, "prompt_tokens_total": 0.0, "generation_tokens_total": 0.0, "num_requests_running": 0.0, "num_requests_waiting": 0.0, "gpu_mem_MiB": 35717}
+{"t": "2026-10-16T04:22:41-04:00", "run": "f1plrep_526576.35", "phase": "watch_end", "elapsed_s": 43, "sims_done": 5, "reward1": 3, "mean_reward": 0.6, "terminations": {"user_stop": 5}}
+{"t": "2026-10-16T04:22:41-04:00", "run": "f1plrep_526576.35", "phase": "tau2_end", "rc": 0, "wall_s": 43}
+{"t": "2026-10-16T04:22:41-04:00", "run": "f1plrep_526576.35", "phase": "step_end", "exit_rc": 0, "wall_s": 226, "gpu_hours_est": 0.063}

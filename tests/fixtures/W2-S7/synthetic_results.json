@@ -1,0 +1,447 @@
+{
+ "_note": "Synthetic W2-S7 results.json-shaped fixture (hand-written; tool strings follow tau2 user_tools formats).",
+ "simulations": [
+  {
+   "id": "synthA",
+   "task_id": "[service_issue]airplane_mode_on[PERSONA:None]",
+   "messages": [
+    {
+     "role": "assistant",
+     "content": "Hi! How can I help you today?",
+     "tool_calls": null
+    },
+    {
+     "role": "user",
+     "content": "Hi, my phone shows No Service for the past few hours.",
+     "tool_calls": null
+    },
+    {
+     "role": "assistant",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "a1",
+       "name": "get_customer_by_phone",
+       "arguments": {
+        "phone_number": "555-0100"
+       },
+       "requestor": "assistant"
+      }
+     ]
+    },
+    {
+     "role": "tool",
+     "id": "a1",
+     "content": "{\"customer_id\": \"C1\", \"full_name\": \"Test User\", \"account_status\": \"Active\", \"line_ids\": [\"L1\"], \"bill_ids\": [\"B1\"], \"phone_number\": \"555-0100\"}",
+     "requestor": "assistant",
+     "error": false
+    },
+    {
+     "role": "assistant",
+     "content": "Thanks. Could you check your status bar and tell me what icons you see?",
+     "tool_calls": null
+    },
+    {
+     "role": "user",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "u1",
+       "name": "check_status_bar",
+       "arguments": {},
+       "requestor": "user"
+      }
+     ]
+    },
+    {
+     "role": "tool",
+     "id": "u1",
+     "content": "Status Bar: ✈️ Airplane Mode | 🔋 80%",
+     "requestor": "user",
+     "error": false
+    },
+    {
+     "role": "user",
+     "content": "I see an airplane icon at the top, and the battery is at 80%.",
+     "tool_calls": null
+    },
+    {
+     "role": "assistant",
+     "content": "Please turn off airplane mode.",
+     "tool_calls": null
+    },
+    {
+     "role": "user",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "u2",
+       "name": "toggle_airplane_mode",
+       "arguments": {},
+       "requestor": "user"
+      }
+     ]
+    },
+    {
+     "role": "tool",
+     "id": "u2",
+     "content": "Airplane Mode is now OFF.\nStatus Bar: 📶³ Good | 4G | 📱 Data Enabled | 🔋 80%",
+     "requestor": "user",
+     "error": false
+    },
+    {
+     "role": "user",
+     "content": "Done. Airplane mode is off and now I have 3 bars and 4G.",
+     "tool_calls": null
+    },
+    {
+     "role": "assistant",
+     "content": "Your issue should now be resolved. Is there anything else I can help with?",
+     "tool_calls": null
+    },
+    {
+     "role": "user",
+     "content": "###STOP###",
+     "tool_calls": null
+    }
+   ]
+  },
+  {
+   "id": "synthB",
+   "task_id": "[mms_issue]app_permissions[PERSONA:None]",
+   "messages": [
+    {
+     "role": "assistant",
+     "content": "Hi! How can I help you today?",
+     "tool_calls": null
+    },
+    {
+     "role": "user",
+     "content": "I can't send pictures to my friends in a text.",
+     "tool_calls": null
+    },
+    {
+     "role": "assistant",
+     "content": "Let's test it. Can you try sending a picture message and tell me if it goes through?",
+     "tool_calls": null
+    },
+    {
+     "role": "user",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "u1",
+       "name": "can_send_mms",
+       "arguments": {},
+       "requestor": "user"
+      }
+     ]
+    },
+    {
+     "role": "tool",
+     "id": "u1",
+     "content": "Your messaging app cannot send MMS messages.",
+     "requestor": "user",
+     "error": false
+    },
+    {
+     "role": "user",
+     "content": "No, it still fails, I can't send the picture.",
+     "tool_calls": null
+    },
+    {
+     "role": "assistant",
+     "content": "Please check what permissions the messaging app has.",
+     "tool_calls": null
+    },
+    {
+     "role": "user",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "u2",
+       "name": "check_app_permissions",
+       "arguments": {
+        "app_name": "messaging"
+       },
+       "requestor": "user"
+      }
+     ]
+    },
+    {
+     "role": "tool",
+     "id": "u2",
+     "content": "App 'messaging' has permission for: sms.",
+     "requestor": "user",
+     "error": false
+    },
+    {
+     "role": "user",
+     "content": "The messaging app only has sms permission.",
+     "tool_calls": null
+    },
+    {
+     "role": "assistant",
+     "content": "Please grant the messaging app the storage permission.",
+     "tool_calls": null
+    },
+    {
+     "role": "user",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "u3",
+       "name": "grant_app_permission",
+       "arguments": {
+        "app_name": "messaging",
+        "permission": "storage"
+       },
+       "requestor": "user"
+      }
+     ]
+    },
+    {
+     "role": "tool",
+     "id": "u3",
+     "content": "Success. Permission 'storage' granted to app 'messaging'.\nStatus Bar: 📶³ Good | 4G | 📱 Data Enabled | 🔋 80%",
+     "requestor": "user",
+     "error": false
+    },
+    {
+     "role": "user",
+     "content": "It worked, the permission was granted successfully.",
+     "tool_calls": null
+    },
+    {
+     "role": "assistant",
+     "content": "Great, your MMS should be working now. Is there anything else I can help with?",
+     "tool_calls": null
+    },
+    {
+     "role": "user",
+     "content": "No thanks. ###STOP###",
+     "tool_calls": null
+    }
+   ]
+  },
+  {
+   "id": "synthC",
+   "task_id": "[mobile_data_issue]data_saver_on[PERSONA:None]",
+   "messages": [
+    {
+     "role": "assistant",
+     "content": "Hi! How can I help you today?",
+     "tool_calls": null
+    },
+    {
+     "role": "user",
+     "content": "My mobile data is really slow.",
+     "tool_calls": null
+    },
+    {
+     "role": "assistant",
+     "content": "Let's run a speed test and see what you get.",
+     "tool_calls": null
+    },
+    {
+     "role": "user",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "u1",
+       "name": "run_speed_test",
+       "arguments": {},
+       "requestor": "user"
+      }
+     ]
+    },
+    {
+     "role": "tool",
+     "id": "u1",
+     "content": "Speed Test Result: 2.10 Mbps (Poor). Connection is slow. Web browsing may be sluggish, streaming difficult.",
+     "requestor": "user",
+     "error": false
+    },
+    {
+     "role": "user",
+     "content": "The speed test says Poor, 2.1 Mbps.",
+     "tool_calls": null
+    },
+    {
+     "role": "assistant",
+     "content": "Could you check if data saver mode is on? If it is, we will turn it off next.",
+     "tool_calls": null
+    },
+    {
+     "role": "user",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "u2",
+       "name": "check_data_restriction_status",
+       "arguments": {},
+       "requestor": "user"
+      }
+     ]
+    },
+    {
+     "role": "tool",
+     "id": "u2",
+     "content": "Data Saver mode is ON (limits data usage).",
+     "requestor": "user",
+     "error": false
+    },
+    {
+     "role": "user",
+     "content": "Yes, Data Saver mode is on.",
+     "tool_calls": null
+    },
+    {
+     "role": "assistant",
+     "content": "Please turn off data saver mode.",
+     "tool_calls": null
+    },
+    {
+     "role": "user",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "u3",
+       "name": "toggle_data_saver_mode",
+       "arguments": {},
+       "requestor": "user"
+      }
+     ]
+    },
+    {
+     "role": "tool",
+     "id": "u3",
+     "content": "Data Saver Mode is now OFF.\nStatus Bar: 📶³ Good | 4G | 📱 Data Enabled | 🔋 80%",
+     "requestor": "user",
+     "error": false
+    },
+    {
+     "role": "user",
+     "content": "Done, it's off now.",
+     "tool_calls": null
+    },
+    {
+     "role": "assistant",
+     "content": "Please run the speed test again.",
+     "tool_calls": null
+    },
+    {
+     "role": "user",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "u4",
+       "name": "run_speed_test",
+       "arguments": {},
+       "requestor": "user"
+      }
+     ]
+    },
+    {
+     "role": "tool",
+     "id": "u4",
+     "content": "Speed Test Result: 62.00 Mbps (Good). Connection is good for most activities, including HD streaming.",
+     "requestor": "user",
+     "error": false
+    },
+    {
+     "role": "user",
+     "content": "It shows 62 Mbps, Good.",
+     "tool_calls": null
+    },
+    {
+     "role": "assistant",
+     "content": "Glad I could help, your data is working properly now. Is there anything else I can do for you?",
+     "tool_calls": null
+    },
+    {
+     "role": "user",
+     "content": "###STOP###",
+     "tool_calls": null
+    }
+   ]
+  },
+  {
+   "id": "synthD",
+   "task_id": "[service_issue]sim_missing[PERSONA:None]",
+   "messages": [
+    {
+     "role": "assistant",
+     "content": "Hi! How can I help you today?",
+     "tool_calls": null
+    },
+    {
+     "role": "user",
+     "content": "I have no signal and I can't make calls.",
+     "tool_calls": null
+    },
+    {
+     "role": "assistant",
+     "content": "Could you see whether your phone has picked anything up?",
+     "tool_calls": null
+    },
+    {
+     "role": "user",
+     "content": null,
+     "tool_calls": [
+      {
+       "id": "u1",
+       "name": "check_status_bar",
+       "arguments": {},
+       "requestor": "user"
+      }
+     ]
+    },
+    {
+     "role": "tool",
+     "id": "u1",
+     "content": "Status Bar: 📶¹ Poor | 3G | 📵 Data Disabled | 🔋 80%",
+     "requestor": "user",
+     "error": false
+    },
+    {
+     "role": "user",
+     "content": "It shows three bars and 3G.",
+     "tool_calls": null
+    },
+    {
+     "role": "assistant",
+     "content": "I am sorry, I cannot help further. I will transfer you to a human agent.",
+     "tool_calls": null
+    },
+    {
+     "role": "user",
+     "content": "###TRANSFER###",
+     "tool_calls": null
+    }
+   ]
+  }
+ ],
+ "claim_labels": [
+  {
+   "text": "Your issue should now be resolved. Is there anything else I can help with?",
+   "claim": true
+  },
+  {
+   "text": "Great, your MMS should be working now. Is there anything else I can help with?",
+   "claim": true
+  },
+  {
+   "text": "Glad I could help, your data is working properly now. Is there anything else I can do for you?",
+   "claim": true
+  },
+  {
+   "text": "Please turn off airplane mode.",
+   "claim": false
+  },
+  {
+   "text": "Let's run a speed test and see what you get.",
+   "claim": false
+  }
+ ]
+}

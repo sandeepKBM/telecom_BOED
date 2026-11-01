@@ -1,0 +1,71 @@
+# [telecom_boed] W2 hand cases as fully specified toy POMDPs (owner: Opus). W2 tests build a toy Predictor from this
+# spec and compare against expected_decisions.yaml, which Opus computed with an independent reference solver.
+# Semantics: contracts.py docstring ("Verified flag v" + "Utility semantics"), specialised as follows:
+# - Particle = (hypothesis id, state dict). Each action applies one of its `effects` (set: {...}) with the given prob.
+#   For hypotheses marked unfixable, repair effects do nothing.
+# - Observation after an action, on the post-state: with prob obs.mention_p the agent observes (field, value), where
+#   field "repaired" means all `goal` factors hold. Otherwise it observes null.
+# - repaired(particle) = goal holds AND not requires_transfer. claim = claim_resolved, transfer = transfer.
+# - v: a mutating action (any effect with a non-empty set) resets v to 0. Observing ("repaired", True) sets v = 1,
+#   observing ("repaired", False) sets v = 0, and a null observation leaves v unchanged (0 after a mutation).
+# - Cost: each nonterminal action adds `cost` turn units; reach-avoid failure if accumulated C > budget_B.
+# - Myopic: take the argmax DUG if any DUG > 0, else the better of claim and transfer under U.
+#   k-step: max over {claim, transfer, nonterminal a with E_o V_{k-1} − λc}.
+#   Reach-avoid decision rule: proposal eq. 4 with δ, η. Lookahead depth = depth_k (counted in nonterminal actions).
+cases:
+  repair_verify:            # hand case 1: one-step DUG commits unverified; reach-avoid repairs, then verifies
+    params: {lambda: 0.1, turn_cost: 1.0, rho: 0.0, gamma: 1.0, delta: 0.05, eta: 0.05, c_FA: 1.0, c_esc: 0.3, budget_B: 10, depth_k: 3}
+    goal: {air: "off"}
+    hypotheses:
+      - {id: airplane_mode_on, prior: 1.0, init: {air: "on"}}
+    actions:
+      R_air: {kind: request_device, cost: 1, effects: [{set: {air: "off"}, prob: 0.9}, {set: {}, prob: 0.1}], obs: {field: repaired, mention_p: 0.5}}
+      K_status: {kind: request_device, cost: 1, effects: [{set: {}, prob: 1.0}], obs: {field: repaired, mention_p: 1.0}}
+      claim: {kind: claim_resolved}
+      transfer: {kind: transfer}
+    paths:
+      user_silent_then_fixed: {R_air: "null", K_status: [repaired, true]}
+  unfixable:                # hand case 2: SIM PIN locked; both scorers transfer at once
+    params: {lambda: 0.1, turn_cost: 1.0, rho: 0.0, gamma: 1.0, delta: 0.05, eta: 0.05, c_FA: 1.0, c_esc: 0.3, budget_B: 10, depth_k: 3}
+    goal: {sim: "ok"}
+    hypotheses:
+      - {id: lock_sim_card_pin, prior: 1.0, init: {sim: "locked"}, unfixable: true, requires_transfer: true}
+    actions:
+      R_reseat: {kind: request_device, cost: 1, effects: [{set: {sim: "ok"}, prob: 0.9}, {set: {}, prob: 0.1}], obs: {field: repaired, mention_p: 0.5}}
+      K_sim: {kind: request_device, cost: 1, effects: [{set: {}, prob: 1.0}], obs: {field: sim, mention_p: 1.0}}
+      claim: {kind: claim_resolved}
+      transfer: {kind: transfer}
+  irrelevant_uncertainty:   # hand case 3: two faults with the same repair; the check that tells them apart has gross DUG 0, EIG ln 2
+    params: {lambda: 0.1, turn_cost: 1.0, rho: 0.0, gamma: 1.0, delta: 0.05, eta: 0.05, c_FA: 1.0, c_esc: 0.3, budget_B: 10, depth_k: 2}
+    goal: {data: "on"}
+    hypotheses:
+      - {id: data_mode_off_a, prior: 0.5, init: {data: "off", flavor: "a"}}
+      - {id: data_mode_off_b, prior: 0.5, init: {data: "off", flavor: "b"}}
+    actions:
+      R_data: {kind: request_device, cost: 1, effects: [{set: {data: "on"}, prob: 1.0}], obs: {field: repaired, mention_p: 1.0}}
+      K_flavor: {kind: request_device, cost: 1, effects: [{set: {}, prob: 1.0}], obs: {field: flavor, mention_p: 1.0}}
+      claim: {kind: claim_resolved}
+      transfer: {kind: transfer}
+  budget:                   # hand case 4: case 1 with only 1 turn unit of budget left; verifying would exceed B
+    params: {lambda: 0.1, turn_cost: 1.0, rho: 0.0, gamma: 1.0, delta: 0.05, eta: 0.05, c_FA: 1.0, c_esc: 0.3, budget_B: 10, depth_k: 3}
+    start_cost: 9.0
+    goal: {air: "off"}
+    hypotheses:
+      - {id: airplane_mode_on, prior: 1.0, init: {air: "on"}}
+    actions:
+      R_air: {kind: request_device, cost: 1, effects: [{set: {air: "off"}, prob: 0.9}, {set: {}, prob: 0.1}], obs: {field: repaired, mention_p: 0.5}}
+      K_status: {kind: request_device, cost: 1, effects: [{set: {}, prob: 1.0}], obs: {field: repaired, mention_p: 1.0}}
+      claim: {kind: claim_resolved}
+      transfer: {kind: transfer}
+  alpha0_equivalence:       # hand case 5: γ=1, c_FA=0, c_esc=0, depth 1 → reach-avoid one-step argmax = myopic argmax
+    params: {lambda: 0.05, turn_cost: 1.0, rho: 0.0, gamma: 1.0, delta: 1.0, eta: 0.0, c_FA: 0.0, c_esc: 0.0, budget_B: 10, depth_k: 1}
+    goal: {air: "off", data: "on"}
+    hypotheses:
+      - {id: airplane_mode_on, prior: 0.6, init: {air: "on", data: "on"}}
+      - {id: data_mode_off, prior: 0.4, init: {air: "off", data: "off"}}
+    actions:
+      R_air: {kind: request_device, cost: 1, effects: [{set: {air: "off"}, prob: 1.0}], obs: {field: repaired, mention_p: 1.0}}
+      R_data: {kind: request_device, cost: 1, effects: [{set: {data: "on"}, prob: 1.0}], obs: {field: repaired, mention_p: 1.0}}
+      K_air: {kind: request_device, cost: 1, effects: [{set: {}, prob: 1.0}], obs: {field: air, mention_p: 1.0}}
+      claim: {kind: claim_resolved}
+      transfer: {kind: transfer}

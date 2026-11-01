@@ -1,0 +1,13 @@
+{
+  "_doc": "[telecom_boed] W3-S11 canned conversation. users[i] is the incoming UserMessage text before agent turn i; agent[i] is the canned generate() output (text or a tool call).",
+  "users": [
+    "Hi, my mobile data is really slow and pages barely load.",
+    "The status bar says airplane mode is on.",
+    "Yes please go ahead."
+  ],
+  "agent": [
+    {"text": "Could you please check your status bar and tell me what you see?"},
+    {"tool": "get_customer_by_id", "arguments": {"customer_id": "C1001"}},
+    {"text": "Great, the issue is resolved now. Is there anything else I can help you with?"}
+  ]
+}

@@ -1,0 +1,23 @@
+# [telecom_boed] Repair-relevant BOED + reach-avoid layer on τ²-bench telecom (DDL course project).
+# tau2 is NOT declared as a dependency: it is installed editable from the pinned clone
+# (tau2-bench@4ce7c0397c1eb65c9bbe59aeacfe1ca44a1cd699) by scripts/setup_local.sh / setup_perlmutter.sh.
+# Pins for the shared stack live in constraints/perlmutter_freeze_ddl-{telecom,vllm}.txt.
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "telecom_boed"
+version = "0.1.0"
+requires-python = ">=3.12,<3.14"
+dependencies = ["numpy", "pyyaml"]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-p no:cacheprovider"

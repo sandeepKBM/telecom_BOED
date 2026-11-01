@@ -1,0 +1,9 @@
+# [telecom_boed] PLACEHOLDER persona prior (to be fitted on train-split logs). Does the step on a LATER turn, so within
+# this turn it is usually not done and the reply is an improvised answer.
+name: delayed
+compliance_q: 0.55
+eps_double: 0.02
+eps_extra: 0.02
+default_mention_p: 0.6
+eps_conf: 0.05
+report_when_not_done: uniform

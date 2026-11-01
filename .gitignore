@@ -1,0 +1,23 @@
+# local scratch, run outputs and logs (kept on NFS / Perlmutter, not in git)
+.scratch/
+results/
+logs/
+.codex_graph/
+# backups
+*.orig
+*.bak*
+*.pre-*
+*.cap3
+# python
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+# secrets and keys
+.env
+.env.*
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+.git-credentials

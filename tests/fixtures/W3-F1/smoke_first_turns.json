@@ -1,0 +1,147 @@
+{
+ "_doc": "[telecom_boed] W3-F1: real first user messages + first agent tool calls of the 2026-10-16 rlab2 smoke (5 TRAIN tasks x 2 runs; results/runs/l2plain_526576.20, l2ctrl_526576.21).",
+ "records": [
+  {
+   "run": "l2plain_526576.20",
+   "task_id": "[mobile_data_issue]airplane_mode_on|bad_network_preference[PERSONA:Hard]",
+   "intent": "mobile_data_issue",
+   "first_user": "I'm having trouble with my mobile data. It's either not working or very slow. I really need excellent internet speed on my phone. Can you help me fix this?",
+   "first_agent_calls": [
+    [
+     "check_network_status",
+     {}
+    ]
+   ],
+   "termination": "too_many_errors"
+  },
+  {
+   "run": "l2plain_526576.20",
+   "task_id": "[mobile_data_issue]airplane_mode_on|data_mode_off[PERSONA:None]",
+   "intent": "mobile_data_issue",
+   "first_user": "I'm having trouble with my mobile data. It's either not working or very slow. I need excellent internet speed on my phone, and I'm not willing to accept anything less than that. I don't have access to Wi-Fi right now. Can you help me fix this issue?",
+   "first_agent_calls": [
+    [
+     "check_network_status",
+     {}
+    ]
+   ],
+   "termination": "user_stop"
+  },
+  {
+   "run": "l2plain_526576.20",
+   "task_id": "[mobile_data_issue]bad_network_preference|user_abroad_roaming_enabled_off[PERSONA:Hard]",
+   "intent": "mobile_data_issue",
+   "first_user": "I'm having trouble with my mobile data. It's either not working or very slow. I need excellent internet speed on my phone, and I'm not willing to accept anything less. I'm currently in France, and I don't have access to Wi-Fi. Can you help me fix this?",
+   "first_agent_calls": [
+    [
+     "get_customer_by_phone",
+     {
+      "phone_number": "1234567890"
+     }
+    ]
+   ],
+   "termination": "user_stop"
+  },
+  {
+   "run": "l2plain_526576.20",
+   "task_id": "[mobile_data_issue]data_usage_exceeded|user_abroad_roaming_enabled_off[PERSONA:Easy]",
+   "intent": "mobile_data_issue",
+   "first_user": "I'm having some issues with my mobile data. It's either not working or very slow. I need to fix it so I can get excellent internet speed on my phone. I'm currently in France and don't have access to Wi-Fi. Can you help me with that?",
+   "first_agent_calls": [
+    [
+     "get_customer_by_phone",
+     {
+      "phone_number": "1234567890"
+     }
+    ]
+   ],
+   "termination": "user_stop"
+  },
+  {
+   "run": "l2plain_526576.20",
+   "task_id": "[mobile_data_issue]airplane_mode_on|user_abroad_roaming_enabled_off[PERSONA:None]",
+   "intent": "mobile_data_issue",
+   "first_user": "I'm having trouble with my mobile data. It's either not working or very slow. I need excellent internet speed on my phone, and I'm not willing to accept anything less. I'm currently in France and don't have access to Wi-Fi. Can you help me fix this issue?",
+   "first_agent_calls": [
+    [
+     "get_customer_by_phone",
+     {
+      "phone_number": "1234567890"
+     }
+    ]
+   ],
+   "termination": "too_many_errors"
+  },
+  {
+   "run": "l2ctrl_526576.21",
+   "task_id": "[mobile_data_issue]airplane_mode_on|data_mode_off[PERSONA:None]",
+   "intent": "mobile_data_issue",
+   "first_user": "I'm having trouble with my mobile data. It either stops working or is very slow. I need to fix it and get excellent internet speed on my phone. I'm not willing to accept any other speed (poor, fair, or good). I don't have access to Wi-Fi. Can you help me?",
+   "first_agent_calls": [
+    [
+     "check_network_status",
+     {}
+    ]
+   ],
+   "termination": "too_many_errors"
+  },
+  {
+   "run": "l2ctrl_526576.21",
+   "task_id": "[mobile_data_issue]airplane_mode_on|user_abroad_roaming_enabled_off[PERSONA:None]",
+   "intent": "mobile_data_issue",
+   "first_user": "I'm having trouble with my mobile data. It's either not working or very slow. I need excellent internet speed on my phone, and I'm not willing to accept anything less. I'm currently in France and don't have access to Wi-Fi. Can you help me fix this issue?",
+   "first_agent_calls": [
+    [
+     "get_customer_by_phone",
+     {
+      "phone_number": "1234567890"
+     }
+    ]
+   ],
+   "termination": "too_many_errors"
+  },
+  {
+   "run": "l2ctrl_526576.21",
+   "task_id": "[mobile_data_issue]bad_network_preference|user_abroad_roaming_enabled_off[PERSONA:Hard]",
+   "intent": "mobile_data_issue",
+   "first_user": "I'm having trouble with my mobile data. It's either not working or very slow. I need excellent internet speed on my phone, and I'm not willing to accept anything less. I'm currently in France, and I don't have access to Wi-Fi. Can you help me fix this?",
+   "first_agent_calls": [
+    [
+     "get_customer_by_phone",
+     {
+      "phone_number": "1234567890"
+     }
+    ]
+   ],
+   "termination": "too_many_errors"
+  },
+  {
+   "run": "l2ctrl_526576.21",
+   "task_id": "[mobile_data_issue]data_usage_exceeded|user_abroad_roaming_enabled_off[PERSONA:Easy]",
+   "intent": "mobile_data_issue",
+   "first_user": "Hello! I'm John Smith, and I'm having some issues with my mobile data. It's either not working properly or very slow. I need to fix it so I can get excellent internet speed on my phone. I'm currently in France, and I don't have access to Wi-Fi. Can you help me with that?",
+   "first_agent_calls": [
+    [
+     "get_customer_by_phone",
+     {
+      "phone_number": "1234567890"
+     }
+    ]
+   ],
+   "termination": "too_many_errors"
+  },
+  {
+   "run": "l2ctrl_526576.21",
+   "task_id": "[mobile_data_issue]airplane_mode_on|bad_network_preference[PERSONA:Hard]",
+   "intent": "mobile_data_issue",
+   "first_user": "I'm having trouble with my mobile data. It's either not working or very slow. I really need excellent internet speed on my phone. I don't have access to Wi-Fi, so I need to fix this as soon as possible.",
+   "first_agent_calls": [
+    [
+     "check_network_status",
+     {}
+    ]
+   ],
+   "termination": "user_stop"
+  }
+ ]
+}

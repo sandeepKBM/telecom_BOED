@@ -1,0 +1,179 @@
+"""[telecom_boed] k-step expectimax over beliefs (the "k-step lookahead DUG" baseline) + shared lookahead machinery.
+
+V_0(b) = EU(b) (decide/utility.eu, the myopic U of eq. 2');
+V_k(b) = max( EU(b), max_{a nonterminal [, cost(b)+C(a) <= B if budget_aware]} [ sum_o p(o) V_{k-1}(b'_o) - lambda*C(a) - rho*R(a) ] ).
+Root Q: claim = u_claim, transfer = u_transfer, nonterminal a = sum_o p(o) V_{k-1}(b'_o) - lambda*C(a) - rho*R(a)
+(k = cfg lookahead.depth_k, counted in nonterminal actions). With `budget_aware=True` actions whose cost would exceed B are
+excluded (root Q = NEG). Default `budget_aware=True` (plan spec; expected_decisions.yaml v2 after Opus fixed its reference solver,
+2026-10-16). `budget_aware=False` is kept only as an explicit ablation. Reach-avoid always honours B.
+
+`LookaheadBase` is shared with decide/reach_avoid.py: memo (key = sorted (particle merge key, rounded weight), v, kappa, rounded
+cost, transferred, remaining depth), hit/miss stats, and a pluggable inner-node action provider
+`inner_actions(belief, root_nonterminals) -> Sequence[CandidateAction]`. Default provider: all root nonterminals when
+<= lookahead.inner_m of them, else (first inner_m in heuristic/manual order) U (top inner_m by myopic DUG at that node).
+The provider must be a deterministic function of the belief (the memo is cleared whenever the root nonterminal set changes).
+Works through the Predictor/Grader protocols only; no tau2 imports.
+"""
+from __future__ import annotations
+
+import time
+from typing import Any, Callable, Mapping, Optional, Sequence
+
+import numpy as np
+
+from telecom_boed.contracts import Belief, CandidateAction, DecisionKind, Grader, Predictor
+from telecom_boed.decide.dug import dug
+from telecom_boed.decide.heuristics import MANUAL_ORDER, cand_tool
+from telecom_boed.decide.risk import risk
+from telecom_boed.decide.utility import cost_of, eu, is_terminal, u_claim, u_transfer
+
+NEG = -1e9  # score of an infeasible root action (budget would be exceeded / no lookahead)
+InnerActions = Callable[[Belief, Sequence[CandidateAction]], Sequence[CandidateAction]]
+MEMO_MAX = 500_000
+
+
+def default_inner_actions(predictor: Predictor, grader: Grader, cfg: Mapping[str, Any]) -> InnerActions:
+    m = int(cfg["lookahead"]["inner_m"])
+
+    def provider(belief: Belief, root_nt: Sequence[CandidateAction]) -> Sequence[CandidateAction]:
+        if len(root_nt) <= m:
+            return root_nt
+        def rank(i: int) -> tuple:
+            t = cand_tool(root_nt[i])
+            return (MANUAL_ORDER.index(t) if t in MANUAL_ORDER else len(MANUAL_ORDER), i)
+        by_heur = sorted(range(len(root_nt)), key=rank)[:m]
+        by_dug = sorted(range(len(root_nt)), key=lambda i: (-dug(belief, root_nt[i], predictor, grader, cfg), i))[:m]
+        return [root_nt[i] for i in sorted(set(by_heur) | set(by_dug))]
+    return provider
+
+
+class LookaheadBase:
+    """Memo + inner action set + stats shared by KStepExpectimax / ReachAvoid / ReachAvoidMargin."""
+
+    name = "lookahead"
+
+    def __init__(self, predictor: Predictor, grader: Grader, cfg: Mapping[str, Any],
+                 inner_actions: Optional[InnerActions] = None, depth: Optional[int] = None):
+        self.predictor, self.grader, self.cfg = predictor, grader, cfg
+        self.depth = int(cfg["lookahead"]["depth_k"]) if depth is None else int(depth)
+        self.B = float(cfg["cost"]["budget_B"])
+        self.lam, self.rho = float(cfg["cost"]["lambda"]), float(cfg["cost"]["rho"])
+        self.quantum = float(cfg["lookahead"]["memo_round"])
+        self.inner_actions = inner_actions or default_inner_actions(predictor, grader, cfg)
+        self._memo: dict = {}
+        self._root_nt: tuple = ()
+        self.hits = self.misses = 0
+
+    # ---- memo
+    def clear_memo(self) -> None:
+        self._memo.clear()
+
+    def reset_stats(self) -> None:
+        self.hits = self.misses = 0
+
+    @property
+    def stats(self) -> dict:
+        n = self.hits + self.misses
+        return {"hits": self.hits, "misses": self.misses, "hit_rate": self.hits / n if n else 0.0, "size": len(self._memo)}
+
+    def _key(self, b: Belief, d: int) -> tuple:
+        q = self.quantum
+        parts = sorted(((p.hyp_key[0], tuple(sorted(p.hyp_key[1])), p.state.key), int(round(p.weight / q))) for p in b.particles)
+        return (tuple(parts), b.v, b.kappa, round(b.cost, 6), b.transferred, d)
+
+    def _memoised(self, b: Belief, d: int, fn: Callable[[], float]) -> float:
+        k = self._key(b, d)
+        if k in self._memo:
+            self.hits += 1
+            return self._memo[k]
+        self.misses += 1
+        val = fn()
+        if len(self._memo) >= MEMO_MAX:
+            self._memo.clear()
+        self._memo[k] = val
+        return val
+
+    def _set_root(self, candidates: Sequence[CandidateAction]) -> list[CandidateAction]:
+        nt = [c for c in candidates if not is_terminal(c)]
+        if tuple(nt) != self._root_nt:
+            self._root_nt = tuple(nt)
+            self._memo.clear()
+        return nt
+
+    def _inner(self, b: Belief) -> Sequence[CandidateAction]:
+        return self.inner_actions(b, self._root_nt)
+
+    def _penalty(self, b: Belief, a: CandidateAction) -> tuple[float, float]:
+        c = cost_of(a, self.predictor, self.cfg)
+        return c, self.lam * c + self.rho * risk(a, b)[0]
+
+
+class KStepExpectimax(LookaheadBase):
+    name = "kstep"
+
+    def __init__(self, *a, budget_aware: bool = True, **kw):
+        super().__init__(*a, **kw)
+        self.budget_aware = budget_aware
+
+    def _eu(self, b: Belief) -> float:
+        return eu(b, self.grader, self.cfg)
+
+    def _q(self, b: Belief, a: CandidateAction, d: int) -> float:
+        """sum_o p(o) V_{d-1}(b'_o) - lambda C(a) - rho R(a); NEG if b.cost + C(a) > B."""
+        c, pen = self._penalty(b, a)
+        if self.budget_aware and b.cost + c > self.B:
+            return NEG
+        return sum(p * self._v(b2, d - 1) for p, b2 in self.predictor.predict(b, a).values()) - pen
+
+    def _v(self, b: Belief, d: int) -> float:
+        return self._memoised(b, d, lambda: self._v_raw(b, d))
+
+    def _v_raw(self, b: Belief, d: int) -> float:
+        best = self._eu(b)
+        if d > 0:
+            for a in self._inner(b):
+                best = max(best, self._q(b, a, d))
+        return best
+
+    def q_values(self, belief: Belief, candidates: Sequence[CandidateAction]) -> list[float]:
+        self._set_root(candidates)
+        out = []
+        for c in candidates:
+            if c.kind == DecisionKind.CLAIM_RESOLVED:
+                out.append(u_claim(belief, self.grader, self.cfg))
+            elif c.kind == DecisionKind.TRANSFER:
+                out.append(u_transfer(belief, self.grader, self.cfg))
+            else:
+                out.append(self._q(belief, c, self.depth) if self.depth > 0 else NEG)
+        return out
+
+    score = q_values
+
+    def value(self, belief: Belief, candidates: Sequence[CandidateAction]) -> float:
+        """V_k at the root over the given candidates (max of the Q values)."""
+        return max(self.q_values(belief, candidates))
+
+    def decide(self, belief: Belief, candidates: Sequence[CandidateAction]) -> int:
+        q = self.q_values(belief, candidates)
+        return max(range(len(q)), key=lambda i: (q[i], candidates[i].kind == DecisionKind.CLAIM_RESOLVED, -i))
+
+
+def bench_scoring(predictor: Predictor, belief: Belief, candidates: Sequence[CandidateAction], scorer: Any, reps: int = 20) -> dict:
+    """Wall-clock latency of one cold scorer.score() (memo cleared each rep) and of one predictor.predict, in ms (p50/p95)."""
+    def pct(xs: list) -> tuple:
+        return float(np.percentile(xs, 50)), float(np.percentile(xs, 95))
+    nt = [c for c in candidates if not is_terminal(c)]
+    t_pred, t_score = [], []
+    for _ in range(reps):
+        if nt:
+            t0 = time.perf_counter()
+            predictor.predict(belief, nt[0])
+            t_pred.append((time.perf_counter() - t0) * 1e3)
+        if hasattr(scorer, "clear_memo"):
+            scorer.clear_memo()
+        t0 = time.perf_counter()
+        scorer.score(belief, candidates)
+        t_score.append((time.perf_counter() - t0) * 1e3)
+    s50, s95 = pct(t_score)
+    p50, p95 = pct(t_pred) if t_pred else (0.0, 0.0)
+    return {"p50_ms": s50, "p95_ms": s95, "predict_p50_ms": p50, "predict_p95_ms": p95, "reps": reps}

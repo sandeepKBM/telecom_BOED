@@ -1,0 +1,8 @@
+# [telecom_boed] PLACEHOLDER persona prior (to be fitted on train-split logs). Follows instructions, reports clearly.
+name: cooperative
+compliance_q: 0.95
+eps_double: 0.01
+eps_extra: 0.01
+default_mention_p: 0.85
+eps_conf: 0.02
+report_when_not_done: uniform

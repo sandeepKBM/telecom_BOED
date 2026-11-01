@@ -1,0 +1,6 @@
+# Captured 2026-10-16 from Perlmutter tau2-bench clone (read-only)
+# Clone: /global/cfs/cdirs/m4431/kbmkbm/ext/tau2-bench
+a610efdf3385d253f0601f2a4e3fc0ab  /global/cfs/cdirs/m4431/kbmkbm/ext/tau2-bench/data/tau2/domains/telecom/tasks.json
+4a547c49d64d98ae3fe165acbfca1162  /global/cfs/cdirs/m4431/kbmkbm/ext/tau2-bench/data/tau2/domains/telecom/split_tasks.json
+HEAD=4ce7c0397c1eb65c9bbe59aeacfe1ca44a1cd699
+PORCELAIN_LINES=0

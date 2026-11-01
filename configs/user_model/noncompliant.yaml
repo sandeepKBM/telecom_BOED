@@ -1,0 +1,8 @@
+# [telecom_boed] PLACEHOLDER persona prior (to be fitted on train-split logs). Often skips the step and says it worked.
+name: noncompliant
+compliance_q: 0.5
+eps_double: 0.02
+eps_extra: 0.02
+default_mention_p: 0.7
+eps_conf: 0.05
+report_when_not_done: claims_done

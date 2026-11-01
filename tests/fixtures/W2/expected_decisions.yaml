@@ -1,0 +1,149 @@
+# [telecom_boed] Expected hand-case results (owner: Opus). Computed 2026-10-16 by an independent Opus-private reference solver
+# from toy_cases.yaml. W2 tests must match these: decisions exactly; values to 1e-9 (stored rounded to 1e-12).
+# 'initial' = decisions/values at the prior belief; named paths = action sequences when observations follow the path
+# (unlisted observations = the most likely one). myopic = eq. 2′ DUG; kstep = expectimax with U; reach = eq. 4 rule.
+# v2 2026-10-16: fixed reference k-step ignoring start_cost (budget case kstep_q); found by W2-S8.
+repair_verify:
+  initial:
+    myopic: R_air
+    myopic_dug:
+      R_air: 1.035
+      K_status: -0.1
+    dug_gross:
+      R_air: 1.135
+      K_status: 0.0
+    eig:
+      R_air: -0.0
+      K_status: -0.0
+    kstep: R_air
+    kstep_q:
+      claim: -1.0
+      transfer: -0.3
+      R_air: 0.8357625
+      K_status: 0.7285
+    reach: R_air
+    reach_q:
+      R_air: 0.80925
+      K_status: 0.6675
+      claim: 0.0
+      transfer: 0
+    V_reach_root: 0.80925
+  user_silent_then_fixed:
+    myopic:
+    - R_air
+    - R_air
+    - claim
+    reach:
+    - R_air
+    - K_status
+    - claim
+    kstep:
+    - R_air
+    - R_air
+    - claim
+unfixable:
+  initial:
+    myopic: transfer
+    myopic_dug:
+      R_reseat: -0.1
+      K_sim: -0.1
+    dug_gross:
+      R_reseat: 0.0
+      K_sim: 0.0
+    eig:
+      R_reseat: -0.0
+      K_sim: -0.0
+    kstep: transfer
+    kstep_q:
+      claim: -1.0
+      transfer: 1.0
+      R_reseat: 0.9
+      K_sim: 0.9
+    reach: transfer
+    reach_q:
+      R_reseat: 0.9
+      K_sim: 0.9
+      claim: 0.0
+      transfer: 1.0
+    V_reach_root: 1.0
+irrelevant_uncertainty:
+  initial:
+    myopic: R_data
+    myopic_dug:
+      R_data: 1.2
+      K_flavor: -0.1
+    dug_gross:
+      R_data: 1.3
+      K_flavor: 0.0
+    eig:
+      R_data: 0.0
+      K_flavor: 0.69314718056
+    kstep: R_data
+    kstep_q:
+      claim: -1.0
+      transfer: -0.3
+      R_data: 0.9
+      K_flavor: 0.8
+    reach: R_data
+    reach_q:
+      R_data: 0.9
+      K_flavor: 0.8
+      claim: 0.0
+      transfer: 0
+    V_reach_root: 0.9
+budget:
+  initial:
+    myopic: R_air
+    myopic_dug:
+      R_air: 1.035
+      K_status: -0.1
+    dug_gross:
+      R_air: 1.135
+      K_status: 0.0
+    eig:
+      R_air: -0.0
+      K_status: -0.0
+    kstep: R_air
+    kstep_q:
+      claim: -1.0
+      transfer: -0.3
+      R_air: 0.735
+      K_status: -0.4
+    reach: R_air
+    reach_q:
+      R_air: 0.35
+      K_status: -0.1
+      claim: 0.0
+      transfer: 0
+    V_reach_root: 0.35
+alpha0_equivalence:
+  initial:
+    myopic: R_air
+    myopic_dug:
+      R_air: 0.55
+      R_data: 0.35
+      K_air: -0.05
+    dug_gross:
+      R_air: 0.6
+      R_data: 0.4
+      K_air: 0.0
+    eig:
+      R_air: 0.673011667009
+      R_data: 0.673011667009
+      K_air: 0.673011667009
+    kstep: R_air
+    kstep_q:
+      claim: 0.0
+      transfer: 0.0
+      R_air: 0.55
+      R_data: 0.35
+      K_air: -0.05
+    reach: R_air
+    reach_q:
+      R_air: 0.55
+      R_data: 0.35
+      K_air: -0.05
+      claim: 0.0
+      transfer: 0
+    V_reach_root: 0.55
+

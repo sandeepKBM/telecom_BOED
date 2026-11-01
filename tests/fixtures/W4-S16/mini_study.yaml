@@ -1,0 +1,9 @@
+# W4-S16 test fixture: 2 arms x {native, mix} on 6 train tasks (task_ids override -> native is derived too). Never launched.
+name: mini_study
+hold_job: 526576
+gpus: [0, 1, 3]
+max_concurrent: 2
+arms: [p4_plain_native, p4_ctrl_reach_native]
+users: [native, mix]
+split: train
+tag_prefix: mn

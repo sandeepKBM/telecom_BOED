@@ -1,0 +1,21 @@
+# [telecom_boed] run config (immutable once used: add a new named config, never edit). W4-S16, 2026-10-16.
+# P4 controller study, TRAIN split (74 tasks), native user: plain LLM agent on the WORKFLOW policy (domain telecom-workflow).
+# Copy of the matching smoke/tmpl config with split train, 1 trial, seed 300, conc 4, max_steps 200, max_errors 10.
+# Persona runs are derived by eval/runner.py as p4_workflow__<persona>.yaml (same file + user + task_ids).
+name: p4_workflow_native
+status: ready
+agent: llm_agent
+user: user_simulator
+domain: telecom-workflow
+split: train
+num_trials: 1
+seed: 300
+max_steps: 200
+max_concurrency: 4
+max_errors: 10
+llm:
+  model: hosted_vllm/Qwen/Qwen3-8B     # agent AND user
+  temperature: 0.0
+  extra_body: {chat_template_kwargs: {enable_thinking: false}}
+boed_config: configs/boed_default.yaml
+eval_final: false

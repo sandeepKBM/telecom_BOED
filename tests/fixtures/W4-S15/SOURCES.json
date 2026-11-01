@@ -1,0 +1,5 @@
+{
+ "derived_from": "results/runs/f1ctrep_526576.32 and f1plrep_526576.35 (TRAIN, 5 tasks x 1 trial, Qwen3-8B)",
+ "slimmed": "results.json keeps tasks(id, initial_state, evaluation_criteria) and per-sim role/content/tool_calls/usage/tool ids; sidecar keeps decision.chosen and parse.{belief,emitted,candidates}; run_meta keeps 5 keys; events.jsonl is a full copy",
+ "script": "one-off, not in repo"
+}

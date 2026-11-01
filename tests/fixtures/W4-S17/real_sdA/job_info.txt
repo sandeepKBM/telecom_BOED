@@ -1,0 +1,4 @@
+run=sdA_526576.29 job=526576 step=29 host=rlab2.cs.rutgers.edu date=2026-10-16T02:52:16-04:00 mode=launch model=Qwen/Qwen3-8B hf_home=/freespace/local/ss5772/hf_cache
+split=train num_tasks=<raw:3,patched:all> task_ids= trials=1 conc=3 max_steps=200 seed=300 max_model_len=32768 gpu_util=0.90
+vllm_env: VLLM_BATCH_INVARIANT=1 VLLM_EXTRA_ARGS=--enforce-eager VLLM_PREFIX_CACHE_FLAG=--no-enable-prefix-caching 
+tau2_rc=0 tau2_wall_s=285

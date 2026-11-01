@@ -1,0 +1,21 @@
+# [telecom_boed] run config (immutable once used: add a new named config, never edit). 2026-10-28: copy of l2pm_boedctrl_reach_repair_native_train5 with num_tasks 5 -> 20 and agent_kwargs.pick: first_new (controller sampling + repair, NO BOED scoring) (5-arm repair/no-repeat comparison).
+# boed-controller, scorer=reach, user=user_simulator; same knobs as the W0-L1 raw smoke (5 train tasks, 1 trial, seed 300, conc 3, max_steps 200).
+name: l2x_firstnew_repair_native_train20
+status: ready
+agent: boed-controller
+agent_kwargs: {scorer: reach, repair_invalid_user_tools: true, pick: first_new}
+user: user_simulator
+domain: telecom
+split: train
+num_tasks: 20
+num_trials: 1
+seed: 300
+max_steps: 200
+max_concurrency: 3
+max_errors: 10
+llm:
+  model: hosted_vllm/Qwen/Qwen3-8B
+  temperature: 0.0
+  extra_body: {chat_template_kwargs: {enable_thinking: false}}
+boed_config: configs/boed_default.yaml
+eval_final: false

@@ -1,0 +1,20 @@
+# [telecom_boed] run config (immutable once used). Determinism check 2026-10-16: llm_agent at max_concurrency 1 on the W0-L1 tasks,
+# run back-to-back on the same GPU as its pair (det_llmagent_* vs det_boedplain_*) to separate code identity from serving noise.
+name: det_llmagent_native_train5_c1
+status: ready
+agent: llm_agent
+user: user_simulator
+domain: telecom
+split: train
+num_tasks: 5
+num_trials: 1
+seed: 300
+max_steps: 200
+max_concurrency: 1
+max_errors: 10
+llm:
+  model: hosted_vllm/Qwen/Qwen3-8B
+  temperature: 0.0
+  extra_body: {chat_template_kwargs: {enable_thinking: false}}
+boed_config: configs/boed_default.yaml
+eval_final: false

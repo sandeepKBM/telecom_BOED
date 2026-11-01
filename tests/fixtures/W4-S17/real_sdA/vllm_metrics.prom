@@ -1,0 +1,12 @@
+vllm:num_requests_running{engine="0",model_name="Qwen/Qwen3-8B"} 0.0
+vllm:num_requests_waiting{engine="0",model_name="Qwen/Qwen3-8B"} 0.0
+vllm:prefix_cache_queries_total{engine="0",model_name="Qwen/Qwen3-8B"} 0.0
+vllm:prefix_cache_hits_total{engine="0",model_name="Qwen/Qwen3-8B"} 0.0
+vllm:prompt_tokens_total{engine="0",model_name="Qwen/Qwen3-8B"} 786733.0
+vllm:generation_tokens_total{engine="0",model_name="Qwen/Qwen3-8B"} 4239.0
+vllm:request_queue_time_seconds_count{engine="0",model_name="Qwen/Qwen3-8B"} 113.0
+vllm:request_queue_time_seconds_sum{engine="0",model_name="Qwen/Qwen3-8B"} 0.001633564941585064
+vllm:request_prefill_time_seconds_count{engine="0",model_name="Qwen/Qwen3-8B"} 113.0
+vllm:request_prefill_time_seconds_sum{engine="0",model_name="Qwen/Qwen3-8B"} 93.09065980091691
+vllm:request_decode_time_seconds_count{engine="0",model_name="Qwen/Qwen3-8B"} 113.0
+vllm:request_decode_time_seconds_sum{engine="0",model_name="Qwen/Qwen3-8B"} 178.84688151907176

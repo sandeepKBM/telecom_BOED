@@ -1,0 +1,25 @@
+# [telecom_boed] study spec (W4-S16). P4 controller study on the TRAIN split (74 tasks), 8 arms x {native, six-persona mix}.
+# Run:  python3 scripts/telecom_study.py plan configs/studies/p4_train.yaml    (then `run`; manifest: results/studies/p4_train/manifest.jsonl)
+# native = tau2's built-in user on all 74 tasks; mix = the six personas replace the built-in persona, tasks dealt round-robin
+# over sorted ids (cooperative, terse, confused, contradictory, noncompliant, delayed). Every arm sees the SAME 74 ids and the SAME
+# persona assignment, so plain-vs-controller pairs are task-for-task comparable. All steps DETERMINISTIC=1 (W3-D1).
+name: p4_train
+hold_job: 526576          # rlab2 4xA100-40GB hold, shared with other projects
+gpus: [0, 1, 3]           # ADVISORY (bounds the wall estimate): cdx-agent --gpu-lock takes the lowest free GPU; indices cannot be pinned
+max_concurrent: 2         # the hold's 160 GB RAM is shared with bimanual's 64 GB LoRA; each step takes --mem=40G
+deterministic: true
+split: train
+tag_prefix: p4            # tags p4a<arm#><user> (<= 12 chars: AF_UNIX socket path limit)
+arms:
+  - p4_plain_native           # llm_agent, domain telecom
+  - p4_plain_repair_native    # boed-plain (scorer reach) + repair_invalid_user_tools
+  - p4_workflow_native        # llm_agent, domain telecom-workflow
+  - p4_ctrl_reach_native      # boed-controller + repair, scorer reach
+  - p4_ctrl_dug_native
+  - p4_ctrl_kstep_native
+  - p4_ctrl_eig_native
+  - p4_ctrl_heuristic_native
+users: [native, mix]
+# tau2_timeout_s / eta_min unset: derived per step as 3x the episode estimate (>= 1500 s) and 1.3x(startup + estimate).
+sec_per_episode: 45       # planning only: wall seconds per episode, deterministic mode, concurrency 4 (L1/F1 smokes: ~43 s)
+startup_s: 180            # planning only: vLLM start in --enforce-eager mode (events: ready_s 176-181)

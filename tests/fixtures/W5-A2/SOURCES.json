@@ -1,0 +1,3 @@
+{"f1plrep_526576.35": "copy (results.json, run_meta.json, sidecar.jsonl) of tests/fixtures/W4-S15/f1plrep_526576.35 = results/runs/f1plrep_526576.35 (TRAIN)",
+ "f1ctrep_526576.32": "copy of tests/fixtures/W4-S15/f1ctrep_526576.32 = results/runs/f1ctrep_526576.32 (TRAIN)",
+ "expected_f1plrep.json": "golden label subset for f1plrep, produced by internals.labels.label_run on 2026-10-16 and checked against the transcripts by hand (airplane_mode_on fixed at turn 3, data_mode_off at turn 5 in the first episode)"}

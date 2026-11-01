@@ -1,0 +1,1849 @@
+[
+{
+"claim_prob": 0.03,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"data_mode_off"
+],
+"faults_remaining": [
+"airplane_mode_on",
+"data_mode_off"
+],
+"filter": null,
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 0,
+"persona": null,
+"remaining_agent_turns": 6,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|data_mode_off[PERSONA:None]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 0
+},
+{
+"claim_prob": 0.01,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"data_mode_off"
+],
+"faults_remaining": [
+"airplane_mode_on",
+"data_mode_off"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 1,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": true,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 2,
+"persona": null,
+"remaining_agent_turns": 5,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|data_mode_off[PERSONA:None]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 1
+},
+{
+"claim_prob": 0.03,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"data_mode_off"
+],
+"faults_remaining": [
+"airplane_mode_on",
+"data_mode_off"
+],
+"filter": {
+"n_particles": 261,
+"p_repaired": 0,
+"sidecar_turn": 2,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": true,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 6,
+"persona": null,
+"remaining_agent_turns": 4,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|data_mode_off[PERSONA:None]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 2
+},
+{
+"claim_prob": 0.01,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"data_mode_off"
+],
+"faults_remaining": [
+"data_mode_off"
+],
+"filter": {
+"n_particles": 261,
+"p_repaired": 0,
+"sidecar_turn": 3,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": true,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 10,
+"persona": null,
+"remaining_agent_turns": 3,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|data_mode_off[PERSONA:None]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 3
+},
+{
+"claim_prob": 0.03,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"data_mode_off"
+],
+"faults_remaining": [
+"data_mode_off"
+],
+"filter": {
+"n_particles": 261,
+"p_repaired": 0,
+"sidecar_turn": 4,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": true,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 14,
+"persona": null,
+"remaining_agent_turns": 2,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|data_mode_off[PERSONA:None]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 4
+},
+{
+"claim_prob": 0.01,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"data_mode_off"
+],
+"faults_remaining": [],
+"filter": {
+"n_particles": 261,
+"p_repaired": 0,
+"sidecar_turn": 5,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": true,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 18,
+"persona": null,
+"remaining_agent_turns": 1,
+"repaired_now": true,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|data_mode_off[PERSONA:None]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 5
+},
+{
+"claim_prob": 0.01,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"data_mode_off"
+],
+"faults_remaining": [],
+"filter": {
+"n_particles": 261,
+"p_repaired": 0,
+"sidecar_turn": 6,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": true,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 22,
+"persona": null,
+"remaining_agent_turns": 0,
+"repaired_now": true,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|data_mode_off[PERSONA:None]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 6
+},
+{
+"claim_prob": 0.03,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"bad_network_preference"
+],
+"faults_remaining": [
+"airplane_mode_on",
+"bad_network_preference"
+],
+"filter": null,
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 0,
+"persona": null,
+"remaining_agent_turns": 7,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|bad_network_preference[PERSONA:Hard]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 0
+},
+{
+"claim_prob": 0.01,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"bad_network_preference"
+],
+"faults_remaining": [
+"airplane_mode_on",
+"bad_network_preference"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 1,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": true,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 2,
+"persona": null,
+"remaining_agent_turns": 6,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|bad_network_preference[PERSONA:Hard]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 1
+},
+{
+"claim_prob": 0.01,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"bad_network_preference"
+],
+"faults_remaining": [
+"airplane_mode_on",
+"bad_network_preference"
+],
+"filter": {
+"n_particles": 261,
+"p_repaired": 0,
+"sidecar_turn": 2,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": true,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 6,
+"persona": null,
+"remaining_agent_turns": 5,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|bad_network_preference[PERSONA:Hard]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 2
+},
+{
+"claim_prob": 0.03,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"bad_network_preference"
+],
+"faults_remaining": [
+"airplane_mode_on",
+"bad_network_preference"
+],
+"filter": {
+"n_particles": 261,
+"p_repaired": 0,
+"sidecar_turn": 3,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": true,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 10,
+"persona": null,
+"remaining_agent_turns": 4,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|bad_network_preference[PERSONA:Hard]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 3
+},
+{
+"claim_prob": 0.01,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"bad_network_preference"
+],
+"faults_remaining": [
+"bad_network_preference"
+],
+"filter": {
+"n_particles": 261,
+"p_repaired": 0,
+"sidecar_turn": 4,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": true,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 14,
+"persona": null,
+"remaining_agent_turns": 3,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|bad_network_preference[PERSONA:Hard]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 4
+},
+{
+"claim_prob": 0.03,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"bad_network_preference"
+],
+"faults_remaining": [
+"bad_network_preference"
+],
+"filter": {
+"n_particles": 261,
+"p_repaired": 0,
+"sidecar_turn": 5,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": true,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 18,
+"persona": null,
+"remaining_agent_turns": 2,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|bad_network_preference[PERSONA:Hard]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 5
+},
+{
+"claim_prob": 0.01,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"bad_network_preference"
+],
+"faults_remaining": [],
+"filter": {
+"n_particles": 263,
+"p_repaired": 0.0022401200319682522,
+"sidecar_turn": 6,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": true,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 22,
+"persona": null,
+"remaining_agent_turns": 1,
+"repaired_now": true,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|bad_network_preference[PERSONA:Hard]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 6
+},
+{
+"claim_prob": 0.92,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"bad_network_preference"
+],
+"faults_remaining": [],
+"filter": {
+"n_particles": 263,
+"p_repaired": 0.14788724853050694,
+"sidecar_turn": 7,
+"v": true
+},
+"final_reward": 1.0,
+"is_claim": true,
+"is_device_request": false,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 26,
+"persona": null,
+"remaining_agent_turns": 0,
+"repaired_now": true,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|bad_network_preference[PERSONA:Hard]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 7
+},
+{
+"claim_prob": 0.03,
+"end_class": "user_transfer",
+"false_accept_here": false,
+"faults": [
+"bad_network_preference",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"bad_network_preference",
+"user_abroad_roaming_enabled_off"
+],
+"filter": null,
+"final_reward": 0.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": false,
+"mc_return": 0.0,
+"msg_idx": 0,
+"persona": null,
+"remaining_agent_turns": 8,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]bad_network_preference|user_abroad_roaming_enabled_off[PERSONA:Hard]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 0
+},
+{
+"claim_prob": null,
+"end_class": "user_transfer",
+"false_accept_here": false,
+"faults": [
+"bad_network_preference",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"bad_network_preference",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 1,
+"v": false
+},
+"final_reward": 0.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": true,
+"mc_return": 0.0,
+"msg_idx": 2,
+"persona": null,
+"remaining_agent_turns": 7,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]bad_network_preference|user_abroad_roaming_enabled_off[PERSONA:Hard]",
+"tool_name": "get_customer_by_phone",
+"transferred_so_far": false,
+"trial": 0,
+"turn": 1
+},
+{
+"claim_prob": 0.03,
+"end_class": "user_transfer",
+"false_accept_here": false,
+"faults": [
+"bad_network_preference",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"bad_network_preference",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 2,
+"v": false
+},
+"final_reward": 0.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": false,
+"mc_return": 0.0,
+"msg_idx": 4,
+"persona": null,
+"remaining_agent_turns": 6,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]bad_network_preference|user_abroad_roaming_enabled_off[PERSONA:Hard]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 2
+},
+{
+"claim_prob": null,
+"end_class": "user_transfer",
+"false_accept_here": false,
+"faults": [
+"bad_network_preference",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"bad_network_preference",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 3,
+"v": false
+},
+"final_reward": 0.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": true,
+"mc_return": 0.0,
+"msg_idx": 6,
+"persona": null,
+"remaining_agent_turns": 5,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]bad_network_preference|user_abroad_roaming_enabled_off[PERSONA:Hard]",
+"tool_name": "get_customer_by_id",
+"transferred_so_far": false,
+"trial": 0,
+"turn": 3
+},
+{
+"claim_prob": 0.01,
+"end_class": "user_transfer",
+"false_accept_here": false,
+"faults": [
+"bad_network_preference",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"bad_network_preference",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 4,
+"v": false
+},
+"final_reward": 0.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": false,
+"mc_return": 0.0,
+"msg_idx": 8,
+"persona": null,
+"remaining_agent_turns": 4,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]bad_network_preference|user_abroad_roaming_enabled_off[PERSONA:Hard]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 4
+},
+{
+"claim_prob": null,
+"end_class": "user_transfer",
+"false_accept_here": false,
+"faults": [
+"bad_network_preference",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"bad_network_preference",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 5,
+"v": false
+},
+"final_reward": 0.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": true,
+"mc_return": 0.0,
+"msg_idx": 10,
+"persona": null,
+"remaining_agent_turns": 3,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]bad_network_preference|user_abroad_roaming_enabled_off[PERSONA:Hard]",
+"tool_name": "get_customer_by_name",
+"transferred_so_far": false,
+"trial": 0,
+"turn": 5
+},
+{
+"claim_prob": 0.01,
+"end_class": "user_transfer",
+"false_accept_here": false,
+"faults": [
+"bad_network_preference",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"bad_network_preference",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 6,
+"v": false
+},
+"final_reward": 0.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": false,
+"mc_return": 0.0,
+"msg_idx": 12,
+"persona": null,
+"remaining_agent_turns": 2,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]bad_network_preference|user_abroad_roaming_enabled_off[PERSONA:Hard]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 6
+},
+{
+"claim_prob": null,
+"end_class": "user_transfer",
+"false_accept_here": false,
+"faults": [
+"bad_network_preference",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"bad_network_preference",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 7,
+"v": false
+},
+"final_reward": 0.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": true,
+"mc_return": 0.0,
+"msg_idx": 14,
+"persona": null,
+"remaining_agent_turns": 1,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]bad_network_preference|user_abroad_roaming_enabled_off[PERSONA:Hard]",
+"tool_name": "transfer_to_human_agents",
+"transferred_so_far": false,
+"trial": 0,
+"turn": 7
+},
+{
+"claim_prob": 0.03,
+"end_class": "user_transfer",
+"false_accept_here": false,
+"faults": [
+"bad_network_preference",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"bad_network_preference",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 8,
+"v": false
+},
+"final_reward": 0.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": false,
+"mc_return": 0.0,
+"msg_idx": 16,
+"persona": null,
+"remaining_agent_turns": 0,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]bad_network_preference|user_abroad_roaming_enabled_off[PERSONA:Hard]",
+"tool_name": null,
+"transferred_so_far": true,
+"trial": 0,
+"turn": 8
+},
+{
+"claim_prob": 0.03,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"data_usage_exceeded",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"data_usage_exceeded",
+"user_abroad_roaming_enabled_off"
+],
+"filter": null,
+"final_reward": 0.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": false,
+"mc_return": 0.0,
+"msg_idx": 0,
+"persona": null,
+"remaining_agent_turns": 7,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]data_usage_exceeded|user_abroad_roaming_enabled_off[PERSONA:Easy]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 0
+},
+{
+"claim_prob": null,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"data_usage_exceeded",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"data_usage_exceeded",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 1,
+"v": false
+},
+"final_reward": 0.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": true,
+"mc_return": 0.0,
+"msg_idx": 2,
+"persona": null,
+"remaining_agent_turns": 6,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]data_usage_exceeded|user_abroad_roaming_enabled_off[PERSONA:Easy]",
+"tool_name": "get_customer_by_phone",
+"transferred_so_far": false,
+"trial": 0,
+"turn": 1
+},
+{
+"claim_prob": 0.03,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"data_usage_exceeded",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"data_usage_exceeded",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 2,
+"v": false
+},
+"final_reward": 0.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": false,
+"mc_return": 0.0,
+"msg_idx": 4,
+"persona": null,
+"remaining_agent_turns": 5,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]data_usage_exceeded|user_abroad_roaming_enabled_off[PERSONA:Easy]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 2
+},
+{
+"claim_prob": null,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"data_usage_exceeded",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"data_usage_exceeded",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 3,
+"v": false
+},
+"final_reward": 0.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": true,
+"mc_return": 0.0,
+"msg_idx": 6,
+"persona": null,
+"remaining_agent_turns": 4,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]data_usage_exceeded|user_abroad_roaming_enabled_off[PERSONA:Easy]",
+"tool_name": "get_customer_by_name",
+"transferred_so_far": false,
+"trial": 0,
+"turn": 3
+},
+{
+"claim_prob": 0.01,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"data_usage_exceeded",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"data_usage_exceeded",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 4,
+"v": false
+},
+"final_reward": 0.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": false,
+"mc_return": 0.0,
+"msg_idx": 8,
+"persona": null,
+"remaining_agent_turns": 3,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]data_usage_exceeded|user_abroad_roaming_enabled_off[PERSONA:Easy]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 4
+},
+{
+"claim_prob": null,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"data_usage_exceeded",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"data_usage_exceeded",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 5,
+"v": false
+},
+"final_reward": 0.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": true,
+"mc_return": 0.0,
+"msg_idx": 10,
+"persona": null,
+"remaining_agent_turns": 2,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]data_usage_exceeded|user_abroad_roaming_enabled_off[PERSONA:Easy]",
+"tool_name": "get_customer_by_name",
+"transferred_so_far": false,
+"trial": 0,
+"turn": 5
+},
+{
+"claim_prob": 0.03,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"data_usage_exceeded",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"data_usage_exceeded",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 6,
+"v": false
+},
+"final_reward": 0.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": false,
+"mc_return": 0.0,
+"msg_idx": 12,
+"persona": null,
+"remaining_agent_turns": 1,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]data_usage_exceeded|user_abroad_roaming_enabled_off[PERSONA:Easy]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 6
+},
+{
+"claim_prob": 0.85,
+"end_class": "stop",
+"false_accept_here": true,
+"faults": [
+"data_usage_exceeded",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"data_usage_exceeded",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 7,
+"v": false
+},
+"final_reward": 0.0,
+"is_claim": true,
+"is_device_request": false,
+"is_tool_call": false,
+"mc_return": 0.0,
+"msg_idx": 14,
+"persona": null,
+"remaining_agent_turns": 0,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]data_usage_exceeded|user_abroad_roaming_enabled_off[PERSONA:Easy]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 7
+},
+{
+"claim_prob": 0.03,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"filter": null,
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 0,
+"persona": null,
+"remaining_agent_turns": 23,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|user_abroad_roaming_enabled_off[PERSONA:None]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 0
+},
+{
+"claim_prob": null,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 1,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": true,
+"mc_return": 1.0,
+"msg_idx": 2,
+"persona": null,
+"remaining_agent_turns": 22,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|user_abroad_roaming_enabled_off[PERSONA:None]",
+"tool_name": "get_customer_by_phone",
+"transferred_so_far": false,
+"trial": 0,
+"turn": 1
+},
+{
+"claim_prob": 0.03,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 2,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 4,
+"persona": null,
+"remaining_agent_turns": 21,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|user_abroad_roaming_enabled_off[PERSONA:None]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 2
+},
+{
+"claim_prob": null,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 3,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": true,
+"mc_return": 1.0,
+"msg_idx": 6,
+"persona": null,
+"remaining_agent_turns": 20,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|user_abroad_roaming_enabled_off[PERSONA:None]",
+"tool_name": "get_customer_by_name",
+"transferred_so_far": false,
+"trial": 0,
+"turn": 3
+},
+{
+"claim_prob": 0.01,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 4,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 8,
+"persona": null,
+"remaining_agent_turns": 19,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|user_abroad_roaming_enabled_off[PERSONA:None]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 4
+},
+{
+"claim_prob": null,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 5,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": true,
+"mc_return": 1.0,
+"msg_idx": 10,
+"persona": null,
+"remaining_agent_turns": 18,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|user_abroad_roaming_enabled_off[PERSONA:None]",
+"tool_name": "get_customer_by_phone",
+"transferred_so_far": false,
+"trial": 0,
+"turn": 5
+},
+{
+"claim_prob": 0.01,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 6,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 12,
+"persona": null,
+"remaining_agent_turns": 17,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|user_abroad_roaming_enabled_off[PERSONA:None]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 6
+},
+{
+"claim_prob": null,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 7,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": true,
+"mc_return": 1.0,
+"msg_idx": 16,
+"persona": null,
+"remaining_agent_turns": 16,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|user_abroad_roaming_enabled_off[PERSONA:None]",
+"tool_name": "get_data_usage",
+"transferred_so_far": false,
+"trial": 0,
+"turn": 7
+},
+{
+"claim_prob": null,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 8,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": true,
+"mc_return": 1.0,
+"msg_idx": 18,
+"persona": null,
+"remaining_agent_turns": 15,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|user_abroad_roaming_enabled_off[PERSONA:None]",
+"tool_name": "get_customer_by_phone",
+"transferred_so_far": false,
+"trial": 0,
+"turn": 8
+},
+{
+"claim_prob": null,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 9,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": true,
+"mc_return": 1.0,
+"msg_idx": 20,
+"persona": null,
+"remaining_agent_turns": 14,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|user_abroad_roaming_enabled_off[PERSONA:None]",
+"tool_name": "get_bills_for_customer",
+"transferred_so_far": false,
+"trial": 0,
+"turn": 9
+},
+{
+"claim_prob": null,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 10,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": true,
+"mc_return": 1.0,
+"msg_idx": 22,
+"persona": null,
+"remaining_agent_turns": 13,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|user_abroad_roaming_enabled_off[PERSONA:None]",
+"tool_name": "get_details_by_id",
+"transferred_so_far": false,
+"trial": 0,
+"turn": 10
+},
+{
+"claim_prob": null,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 254,
+"p_repaired": 0,
+"sidecar_turn": 11,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": true,
+"mc_return": 1.0,
+"msg_idx": 24,
+"persona": null,
+"remaining_agent_turns": 12,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|user_abroad_roaming_enabled_off[PERSONA:None]",
+"tool_name": "get_details_by_id",
+"transferred_so_far": false,
+"trial": 0,
+"turn": 11
+},
+{
+"claim_prob": null,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 62,
+"p_repaired": 0,
+"sidecar_turn": 12,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": true,
+"mc_return": 1.0,
+"msg_idx": 26,
+"persona": null,
+"remaining_agent_turns": 11,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|user_abroad_roaming_enabled_off[PERSONA:None]",
+"tool_name": "get_details_by_id",
+"transferred_so_far": false,
+"trial": 0,
+"turn": 12
+},
+{
+"claim_prob": 0.03,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"filter": {
+"n_particles": 62,
+"p_repaired": 0,
+"sidecar_turn": 13,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": false,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 28,
+"persona": null,
+"remaining_agent_turns": 10,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|user_abroad_roaming_enabled_off[PERSONA:None]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 13
+},
+{
+"claim_prob": 0.01,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"airplane_mode_on"
+],
+"filter": {
+"n_particles": 62,
+"p_repaired": 0,
+"sidecar_turn": 14,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": true,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 32,
+"persona": null,
+"remaining_agent_turns": 9,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|user_abroad_roaming_enabled_off[PERSONA:None]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 14
+},
+{
+"claim_prob": 0.01,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"airplane_mode_on"
+],
+"filter": {
+"n_particles": 65,
+"p_repaired": 0,
+"sidecar_turn": 15,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": true,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 36,
+"persona": null,
+"remaining_agent_turns": 8,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|user_abroad_roaming_enabled_off[PERSONA:None]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 15
+},
+{
+"claim_prob": 0.01,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"airplane_mode_on"
+],
+"filter": {
+"n_particles": 65,
+"p_repaired": 0,
+"sidecar_turn": 16,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": true,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 40,
+"persona": null,
+"remaining_agent_turns": 7,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|user_abroad_roaming_enabled_off[PERSONA:None]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 16
+},
+{
+"claim_prob": 0.01,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"airplane_mode_on"
+],
+"filter": {
+"n_particles": 65,
+"p_repaired": 0,
+"sidecar_turn": 17,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": true,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 44,
+"persona": null,
+"remaining_agent_turns": 6,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|user_abroad_roaming_enabled_off[PERSONA:None]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 17
+},
+{
+"claim_prob": 0.01,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"airplane_mode_on"
+],
+"filter": {
+"n_particles": 65,
+"p_repaired": 0,
+"sidecar_turn": 18,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": true,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 48,
+"persona": null,
+"remaining_agent_turns": 5,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|user_abroad_roaming_enabled_off[PERSONA:None]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 18
+},
+{
+"claim_prob": 0.03,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"airplane_mode_on"
+],
+"filter": {
+"n_particles": 65,
+"p_repaired": 0,
+"sidecar_turn": 19,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": true,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 58,
+"persona": null,
+"remaining_agent_turns": 4,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|user_abroad_roaming_enabled_off[PERSONA:None]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 19
+},
+{
+"claim_prob": 0.03,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [
+"airplane_mode_on"
+],
+"filter": {
+"n_particles": 65,
+"p_repaired": 0,
+"sidecar_turn": 20,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": true,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 62,
+"persona": null,
+"remaining_agent_turns": 3,
+"repaired_now": false,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|user_abroad_roaming_enabled_off[PERSONA:None]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 20
+},
+{
+"claim_prob": 0.01,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [],
+"filter": {
+"n_particles": 97,
+"p_repaired": 0.002626660076537797,
+"sidecar_turn": 21,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": true,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 66,
+"persona": null,
+"remaining_agent_turns": 2,
+"repaired_now": true,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|user_abroad_roaming_enabled_off[PERSONA:None]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 21
+},
+{
+"claim_prob": 0.01,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [],
+"filter": {
+"n_particles": 97,
+"p_repaired": 0.002960868096524637,
+"sidecar_turn": 22,
+"v": false
+},
+"final_reward": 1.0,
+"is_claim": false,
+"is_device_request": true,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 70,
+"persona": null,
+"remaining_agent_turns": 1,
+"repaired_now": true,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|user_abroad_roaming_enabled_off[PERSONA:None]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 22
+},
+{
+"claim_prob": 0.92,
+"end_class": "stop",
+"false_accept_here": false,
+"faults": [
+"airplane_mode_on",
+"user_abroad_roaming_enabled_off"
+],
+"faults_remaining": [],
+"filter": {
+"n_particles": 97,
+"p_repaired": 0.186700602310445,
+"sidecar_turn": 23,
+"v": true
+},
+"final_reward": 1.0,
+"is_claim": true,
+"is_device_request": false,
+"is_tool_call": false,
+"mc_return": 1.0,
+"msg_idx": 74,
+"persona": null,
+"remaining_agent_turns": 0,
+"repaired_now": true,
+"run": "f1plrep_526576.35",
+"task_id": "[mobile_data_issue]airplane_mode_on|user_abroad_roaming_enabled_off[PERSONA:None]",
+"tool_name": null,
+"transferred_so_far": false,
+"trial": 0,
+"turn": 23
+}
+]

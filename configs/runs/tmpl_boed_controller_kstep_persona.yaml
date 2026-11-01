@@ -1,0 +1,21 @@
+# [telecom_boed] run config (immutable once used: add a new named config, never edit).
+# TEMPLATE (status: template): boed-controller scorer=kstep + persona user boed-user-<persona> (persona name is a placeholder; see S12 personas).
+# Copy to a new named config before use; the registered names/kwargs may still change (W3-S11/S12).
+name: tmpl_boed_controller_kstep_persona
+status: template
+agent: boed-controller
+agent_kwargs: {scorer: kstep}
+user: boed-user-cooperative
+domain: telecom
+split: train
+num_trials: 1
+seed: 300
+max_steps: 200
+max_concurrency: 4
+max_errors: 10
+llm:
+  model: hosted_vllm/Qwen/Qwen3-8B     # agent AND user (the P3 baseline used the same model for both)
+  temperature: 0.0
+  extra_body: {chat_template_kwargs: {enable_thinking: false}}   # Qwen3 non-thinking (Hermes tool parser on the server)
+boed_config: configs/boed_default.yaml
+eval_final: false

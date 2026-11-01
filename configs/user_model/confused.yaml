@@ -1,0 +1,8 @@
+# [telecom_boed] PLACEHOLDER persona prior (to be fitted on train-split logs). Misreads screens, repeats or over-does steps.
+name: confused
+compliance_q: 0.75
+eps_double: 0.08
+eps_extra: 0.06
+default_mention_p: 0.7
+eps_conf: 0.2
+report_when_not_done: uniform

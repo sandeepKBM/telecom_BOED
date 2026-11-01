@@ -1,0 +1,53 @@
+"""[telecom_boed] EIG baseline: EIG(a) = H(b_h) - E_o H(b_h'|o) over the hypothesis marginal, natural log (docs/proposal.md §3, "EIG" baseline).
+
+Stop rule (EIG has no utility, so it needs a stop rule of its own): commit to a terminal when max_a EIG(a) < cfg["eig"]["stop_nats"]
+(default EIG_STOP_NATS = 1e-3 nats, i.e. nothing left to learn about the hypothesis). The terminal is then the better of
+claim / transfer under U (same terminal rule as MyopicDUG, so the comparison isolates the action-selection criterion). EIG ignores
+costs and risk by design. Scores: nonterminal -> EIG; terminal -> stop_nats - (U_best - U_t) so argmax picks a terminal iff max EIG < stop_nats.
+"""
+from __future__ import annotations
+
+import math
+from collections import defaultdict
+from typing import Any, Mapping, Sequence
+
+from telecom_boed.contracts import Belief, CandidateAction, DecisionKind, Grader, Predictor
+from telecom_boed.decide.utility import is_terminal, u_claim, u_transfer
+
+EIG_STOP_NATS = 1e-3
+
+
+def hyp_entropy(belief: Belief) -> float:
+    m: dict = defaultdict(float)
+    for p in belief.particles:
+        m[p.hyp_key] += p.weight
+    tot = sum(m.values())
+    return -sum((w / tot) * math.log(w / tot) for w in m.values() if w > 0) if tot > 0 else 0.0
+
+
+def eig(belief: Belief, cand: CandidateAction, predictor: Predictor) -> float:
+    return hyp_entropy(belief) - sum(p * hyp_entropy(b2) for p, b2 in predictor.predict(belief, cand).values())
+
+
+class EIGScorer:
+    name = "eig"
+
+    def __init__(self, predictor: Predictor, grader: Grader, cfg: Mapping[str, Any]):
+        self.predictor, self.grader, self.cfg = predictor, grader, cfg
+        self.stop = float(cfg.get("eig", {}).get("stop_nats", EIG_STOP_NATS))
+
+    def score(self, belief: Belief, candidates: Sequence[CandidateAction]) -> list[float]:
+        tu = {DecisionKind.CLAIM_RESOLVED: u_claim(belief, self.grader, self.cfg),
+              DecisionKind.TRANSFER: u_transfer(belief, self.grader, self.cfg)}
+        best = max(tu.values())
+        return [self.stop - (best - tu[c.kind]) if is_terminal(c) else eig(belief, c, self.predictor) for c in candidates]
+
+    def decide(self, belief: Belief, candidates: Sequence[CandidateAction]) -> int:
+        scores = self.score(belief, candidates)
+        non = [i for i, c in enumerate(candidates) if not is_terminal(c)]
+        if non:
+            i = max(non, key=lambda j: (scores[j], -j))
+            if scores[i] >= self.stop:
+                return i
+        terms = [i for i, c in enumerate(candidates) if is_terminal(c)]
+        return max(terms, key=lambda j: (scores[j], candidates[j].kind == DecisionKind.CLAIM_RESOLVED, -j))
